@@ -1,3 +1,4 @@
+#!/bin/zsh
 rm ~/.zshrc
 machine_env_list="develop\ndebug"
 machine_env=$(echo $machine_env_list | fzf)
