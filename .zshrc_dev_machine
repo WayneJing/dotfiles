@@ -178,7 +178,7 @@ fco() {
         --ansi --preview="git --no-pager log -150 --pretty=format:%s '..{2}'") || return
               git checkout $(awk '{print $2}' <<<"$target" )
   }
-export ACCOUNT_PW=""
+source ~/.passwdrc
 sync_artifactory_drop(){
 
     jfrog rt dl --url="http://cloud-gpu-artifactory:8082/artifactory" --user="jingwech" --password="$ACCOUNT_PW" "$1" "/home/wayne/work/test_drop/"

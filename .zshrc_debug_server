@@ -201,7 +201,7 @@ fix_corrupt_history(){
 }
 fix_corrupt_history
 export PATH=$PATH:/snap/bin:/usr/local/share
-export ACCOUNT_PW=""
+source ~/.passwdrc
 stest(){
     realpath $1
     test_case_list=$($1 &)
