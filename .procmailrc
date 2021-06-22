@@ -1,0 +1,22 @@
+MAILDIR=$HOME/Mail   #邮件存储地址
+DEFAULT=$MAILDIR/inbox   #默认：收件箱
+VERBOSE=off
+LOGFILE=/tmp/procmaillog
+ 
+# 某个垃圾邮件规则
+:0
+* ^To:.*(amd-gfx\@lists.freedesktop.org|brahma_sw_dev\@amd.com)
+brahmadev/
+
+
+:0
+* ^Cc:.*(amd-gfx\@lists.freedesktop.org|brahma_sw_dev\@amd.com)
+brahmadev/
+
+:0
+* ^Subject:.*(Libgv\ daily\ promotion)
+libgv_daily/
+
+# 其它所有都存到收件箱中
+:0:
+inbox/

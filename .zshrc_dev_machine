@@ -1,0 +1,246 @@
+# If you come from bash you might have to change your $PATH.
+# export PATH=$HOME/bin:/usr/local/bin:$PATH
+
+# Path to your oh-my-zsh installation.
+export ZSH="/home/wayne/.oh-my-zsh"
+
+# Set name of the theme to load --- if set to "random", it will
+# load a random theme each time oh-my-zsh is loaded, in which case,
+# to know which specific one was loaded, run: echo $RANDOM_THEME
+# See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
+ZSH_THEME="ys"
+
+# Set list of themes to pick from when loading at random
+# Setting this variable when ZSH_THEME=random will cause zsh to load
+# a theme from this variable instead of looking in ~/.oh-my-zsh/themes/
+# If set to an empty array, this variable will have no effect.
+# ZSH_THEME_RANDOM_CANDIDATES=( "robbyrussell" "agnoster" )
+
+# Uncomment the following line to use case-sensitive completion.
+# CASE_SENSITIVE="true"
+
+# Uncomment the following line to use hyphen-insensitive completion.
+# Case-sensitive completion must be off. _ and - will be interchangeable.
+# HYPHEN_INSENSITIVE="true"
+
+# Uncomment the following line to disable bi-weekly auto-update checks.
+# DISABLE_AUTO_UPDATE="true"
+
+# Uncomment the following line to automatically update without prompting.
+# DISABLE_UPDATE_PROMPT="true"
+
+# Uncomment the following line to change how often to auto-update (in days).
+# export UPDATE_ZSH_DAYS=13
+
+# Uncomment the following line if pasting URLs and other text is messed up.
+# DISABLE_MAGIC_FUNCTIONS=true
+
+# Uncomment the following line to disable colors in ls.
+# DISABLE_LS_COLORS="true"
+
+# Uncomment the following line to disable auto-setting terminal title.
+DISABLE_AUTO_TITLE="true"
+
+# Uncomment the following line to enable command auto-correction.
+# ENABLE_CORRECTION="true"
+
+# Uncomment the following line to display red dots whilst waiting for completion.
+# COMPLETION_WAITING_DOTS="true"
+
+# Uncomment the following line if you want to disable marking untracked files
+# under VCS as dirty. This makes repository status check for large repositories
+# much, much faster.
+# DISABLE_UNTRACKED_FILES_DIRTY="true"
+
+# Uncomment the following line if you want to change the command execution time
+# stamp shown in the history command output.
+# You can set one of the optional three formats:
+# "mm/dd/yyyy"|"dd.mm.yyyy"|"yyyy-mm-dd"
+# or set a custom format using the strftime function format specifications,
+# see 'man strftime' for details.
+# HIST_STAMPS="mm/dd/yyyy"
+
+# Would you like to use another custom folder than $ZSH/custom?
+# ZSH_CUSTOM=/path/to/new-custom-folder
+
+# Which plugins would you like to load?
+# Standard plugins can be found in ~/.oh-my-zsh/plugins/*
+# Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
+# Example format: plugins=(rails git textmate ruby lighthouse)
+# Add wisely, as too many plugins slow down shell startup.
+plugins=(git themes zsh-syntax-highlighting z cp extract command-not-found sudo colored-man-pages zsh_reload)
+
+source $ZSH/oh-my-zsh.sh
+
+# User configuration
+
+# export MANPATH="/usr/local/man:$MANPATH"
+
+# You may need to manually set your language environment
+# export LANG=en_US.UTF-8
+
+# Preferred editor for local and remote sessions
+# if [[ -n $SSH_CONNECTION ]]; then
+#   export EDITOR='vim'
+# else
+#   export EDITOR='mvim'
+# fi
+
+# Compilation flags
+# export ARCHFLAGS="-arch x86_64"
+
+# Set personal aliases, overriding those provided by oh-my-zsh libs,
+# plugins, and themes. Aliases can be placed here, though oh-my-zsh
+# users are encouraged to define aliases within the ZSH_CUSTOM folder.
+# For a full list of active aliases, run `alias`.
+#
+# Example aliases
+# alias zshconfig="mate ~/.zshrc"
+# alias ohmyzsh="mate ~/.oh-my-zsh"
+eval "$(thefuck --alias fuck)"
+alias fd="fdfind"
+
+export PATH=$PATH:/snap/bin:~/repo:~/.npm/bin
+export PATH=$PATH:~/work/brahma/dk/lnx/bin
+export USE_GCC_COMPILER=1
+#export FZF_DEFAULT_OPTS="--height 40% --layout=reverse --preview '(ccat --color=always {} ||highlight -O ansi {} || cat {}) 2> /dev/null | head -500'"
+export FZF_DEFAULT_COMMAND='fdfind --type f --hidden --follow --exclude .git'
+#export FZF_COMPLETION_TRIGGER='\'
+export FZF_DEFAULT_OPTS='--height 40% --layout=reverse --preview "[[ $(file --mime {}) =~ binary ]] && echo {} is a binary file || (ccat --color=always {} || highlight -O ansi -l {} || cat {}) 2> /dev/null | head -500"'
+export FZF_COMPLETION_TRIGGER='\'
+export FZF_PREVIEW_COMMAND='[[ $(file --mime {}) =~ binary ]] && echo {} is a binary file || (ccat --color=always {} || highlight -O ansi -l {} || cat {}) 2> /dev/null | head -500'
+
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+export JFROG_CLI_OFFER_CONFIG=false
+alias sshsuper1="echo -e \"\e]2;sshsuper1 ip 10.67.93.99 ipmi 10.67.86.110\007\";sshpass -p 'root' ssh -X root@10.67.93.99"
+alias sshfoxconn="echo -e \"\e]2;sshfoxconn ip 10.67.84.222 ipmi 10.67.234.1\007\";sshpass -p root ssh -X root@10.67.84.222"
+alias sshsuper2="echo -e \"\e]2;sshsuper2 ip 10.67.82.42 ipmi 10.67.82.21 passwd 12345678\007\";sshpass -p root ssh -X root@10.67.82.42"
+alias vats="cd ~/work/vats2"
+alias libgv="cd ~/work/libgv"
+alias brahma="cd ~/work/brahma"
+alias ipmitool_foxconn="ipmitool -H 10.67.234.1 -I lan -U admin -P admin"
+unalias z
+z() {
+  if [[ -z "$*" ]]; then
+    cd "$(_z -l 2>&1 | fzf +s --tac | sed 's/^[0-9,.]* *//')"
+  else
+    _last_z_args="$@"
+    _z "$@"
+  fi
+}
+
+zz() {
+  cd "$(_z -l 2>&1 | sed 's/^[0-9,.]* *//' | fzf -q "$_last_z_args")"
+}
+alias glNoGraph='git log --color=always --format="%C(auto)%h%d %s %C(black)%C(bold)%cr% C(auto)%an" "$@"'
+_gitLogLineToHash="echo {} | grep -o '[a-f0-9]\{7\}' | head -1"
+_viewGitLogLine="$_gitLogLineToHash | xargs -I % sh -c 'git show --color=always % | diff-so-fancy'"
+
+# fcoc_preview - checkout git commit with previews
+fcoc() {
+  local commit
+  commit=$( glNoGraph |
+    fzf --no-sort --reverse --tiebreak=index --no-multi \
+    --ansi --preview="$_viewGitLogLine" ) &&
+    git checkout $(echo "$commit" | sed "s/ .*//")
+  }
+
+# fshow_preview - git commit browser with previews
+fshow() {
+  glNoGraph |
+    fzf --no-sort --reverse --tiebreak=index --no-multi \
+    --ansi --preview="$_viewGitLogLine" \
+    --header "enter to view, alt-y to copy hash" \
+    --bind "enter:execute:$_viewGitLogLine   | less -R" \
+    --bind "alt-y:execute:$_gitLogLineToHash | xclip"
+  }
+# fbr - checkout git branch (including remote branches), sorted by most recent commit, limit 30 last branches
+fbr() {
+  local branches branch
+  branches=$(git for-each-ref --count=30 --sort=-committerdate refs/heads/ --format="%(refname:short)") &&
+    branch=$(echo "$branches" |
+    fzf-tmux -d $(( 2 + $(wc -l <<< "$branches") )) +m) &&
+    git checkout $(echo "$branch" | sed "s/.* //" | sed "s#remotes/[^/]*/##")
+  }
+# fco_preview - checkout git branch/tag, with a preview showing the commits between the tag/branch and HEAD
+fco() {
+  local tags branches target
+  branches=$(
+  git --no-pager branch --all \
+    --format="%(if)%(HEAD)%(then)%(else)%(if:equals=HEAD)%(refname:strip=3)%(then)%(else)%1B[0;34;1mbranch%09%1B[m%(refname:short)%(end)%(end)" \
+    | sed '/^$/d') || return
+      tags=$(
+      git --no-pager tag | awk '{print "\x1b[35;1mtag\x1b[m\t" $1}') || return
+      target=$(
+      (echo "$branches"; echo "$tags") |
+        fzf --no-hscroll --no-multi -n 2 \
+        --ansi --preview="git --no-pager log -150 --pretty=format:%s '..{2}'") || return
+              git checkout $(awk '{print $2}' <<<"$target" )
+  }
+export ACCOUNT_PW=""
+sync_artifactory_drop(){
+
+    jfrog rt dl --url="http://cloud-gpu-artifactory:8082/artifactory" --user="jingwech" --password="$ACCOUNT_PW" "$1" "/home/wayne/work/test_drop/"
+
+  }
+
+change_konsole_title() {
+    echo -ne "\033]30;$1\007"
+}
+
+change_title() {
+    echo -e "\e]2;$1\007"
+}
+ipmihelper() {
+    machine_name_list='super1\nsuper2\nfoxconn'
+    #echo $machine_name_list
+
+    if [ "" = "$1" ]; then
+        machine_name=$( echo $machine_name_list | fzf )
+    else
+        machine_name="$1"
+    fi
+
+    echo $machine_name
+    if [ "" != "$(echo $machine_name | grep "super1")" ]; then
+        ipmi_ip="10.67.86.110"
+        user="ADMIN"
+        passwd="ADMIN"
+    elif [ "" != "$(echo $machine_name | grep "super2")" ]; then
+        ipmi_ip="10.67.82.21"
+        user="ADMIN"
+        passwd="12345678"
+    elif [ "" != "$(echo $machine_name | grep "foxconn")" ]; then
+        ipmi_ip="10.67.234.1"
+        user="admin"
+        passwd="admin"
+    else
+        echo "invalid param"
+        return -1
+    fi
+
+    echo $ipmi_ip $user $passwd
+
+    operation_list='reset\nsol'
+    if [ "" = "$2" ]; then
+        operation=$(echo $operation_list | fzf)
+    else
+        operation="$2"
+    fi
+
+    echo $operation
+
+    if [ "" != "$(echo $operation | grep "reset")" ]; then
+        ipmitool -I lanplus -H $ipmi_ip -U $user -P $passwd power off
+        sleep 10
+        ipmitool -I lanplus -H $ipmi_ip -U $user -P $passwd power on
+    elif [ "" != "$(echo $operation | grep "sol")" ]; then
+        ipmitool -I lanplus -H $ipmi_ip -U $user -P $passwd sol activate
+    else
+        echo no operation
+        return -1
+    fi
+
+}
+export TERM=xterm-256color

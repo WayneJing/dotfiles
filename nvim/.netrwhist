@@ -1,0 +1,12 @@
+let g:netrw_dirhistmax  =10
+let g:netrw_dirhistcnt =9
+let g:netrw_dirhist_9='/home/wayne/work/vats2/vats/testcase'
+let g:netrw_dirhist_8='/home/wayne/work/gim'
+let g:netrw_dirhist_7='/home/wayne'
+let g:netrw_dirhist_6='/home/wayne/work/gim'
+let g:netrw_dirhist_5='/home/wayne/work/brahma/linux'
+let g:netrw_dirhist_4='/home/wayne/.config'
+let g:netrw_dirhist_3='/home/wayne/.config/ranger'
+let g:netrw_dirhist_2='/home/wayne/work/brahma/linux'
+let g:netrw_dirhist_1='/home/wayne'
+let g:netrw_dirhist_0='/home/wayne/alacritty-theme/themes'
