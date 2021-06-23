@@ -4,7 +4,7 @@ sudo apt install zsh
 
 #install ohmyzsh
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-
+cp ./ys.zsh-theme ~/.oh-my-zsh/themes
 #install zsh plugins
 cd ~/.oh-my-zsh/plugins
 git clone https://github.com/zsh-users/zsh-syntax-highlighting.git
