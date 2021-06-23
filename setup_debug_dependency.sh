@@ -40,6 +40,9 @@ sudo add-apt-repository ppa:neovim-ppa/unstable
 sudo apt-get update
 sudo apt-get install neovim -y
 
+#install universal-ctags
+sudo snap install universal-ctags*.snap --dangerous
+
 #deploy neovim
 cp -rf $repo_path/nvim/ ~/.config
 nvim -c PlugInstall
