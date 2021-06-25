@@ -1,0 +1,6 @@
+# -*- Mode: mutt -*-
+
+# Identification information
+set realname = 'Jingwen Chen'
+set from = 'Jingwen.Chen2@amd.com'
+set sig_dashes='no'

@@ -1,0 +1,12 @@
+# -*- Mode: mutt -*-
+
+# Configuration to be used with a Maildir
+mailboxes =inbox
+mailboxes =brahmadev
+
+set mbox_type="Maildir"
+
+set mbox="~/Mail/inbox"
+
+set mbox="~/Mail/brahmadev"
+set spoolfile="~/Mail/inbox"
