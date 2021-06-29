@@ -40,6 +40,11 @@ sudo add-apt-repository ppa:neovim-ppa/unstable
 sudo apt-get update
 sudo apt-get install neovim -y
 
+#install node
+sudo apt install npm -y
+sudo npm install npm@latest -g
+sudo npm install n -g
+sudo n lts
 #install universal-ctags
 sudo snap install universal-ctags*.snap --dangerous
 
