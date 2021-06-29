@@ -221,11 +221,12 @@ sync_artifactory_drop(){
 
 change_kernel(){
     uname -r
-    kernel_list=$(cat /boot/grub/grub.cfg | grep -i "menuentry_id_option .*" | grep -v simple | grep -io "menuentry_id_option [^{]*"|grep advanced | awk -F" " '{print $2}' |awk -F"'" '{print $2}')
+    kernel_list=$(cat /boot/grub/grub.cfg | grep -i "menuentry_id_option .*" | grep -v simple | grep -io "menuentry_id_option [^{]*"| awk -F" " '{print $2}' |awk -F"'" '{print $2}')
+    valid_kernel=$(echo $kernel_list| grep advanced)
     arr=()
     while read -r line; do
         arr+=("$line\n")
-    done <<< $kernel_list
+    done <<< $valid_kernel
     if [ ! -n "$1"  ]; then
 
         selected=$(echo ${arr[@]:1}| awk '$1=$1' | fzf )
@@ -238,8 +239,11 @@ change_kernel(){
         echo no param entered
         return -1
     fi
-    str="$(echo ${arr[1]} | awk '$1=$1')>$selected"
+    num=$(expr $(echo $kernel_list | grep $selected -n | awk -F":" '{print $1}') - 2)
+    str="1>$num"
+    echo $str
     default=$(cat /etc/default/grub | grep "GRUB_DEFAULT" | awk -F"=" '{print $2}' | awk -F'"' '{print $2}')
+    echo $default
     sed -ir "s/$default/$str/g" /etc/default/grub
     update-grub
 
