@@ -190,7 +190,6 @@ get_vm_ip(){
         ip=$(arp -a | grep -o ".*$mac" | grep -o "(.*)" | grep -o "[^()]*")
     done
     echo vm ip:$ip
-    return $ip
 }
 vmconnect(){
     get_vm_ip $1
