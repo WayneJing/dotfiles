@@ -273,6 +273,7 @@ sync_file(){
         rsync -Pa -e 'sshpass -p root ssh -l root' $1 $2
     else
         rsync -Pa -e "sshpass -p $3 ssh -l root" $1 $2
+    fi
 }
 
 sync_file_to_vm(){
