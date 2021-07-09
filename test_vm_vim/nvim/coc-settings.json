@@ -1,0 +1,8 @@
+{
+  "list.source.files.defaultOptions": ["--number-select"],
+  "python.linting.enabled":false,
+  "git.enableGutters": true,
+  "clangd.enabled": true,
+  "clangd.checkUpdates": true,
+  "clangd.disableDiagnostics": true
+}
