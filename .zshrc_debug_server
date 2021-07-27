@@ -218,8 +218,43 @@ stest(){
 }
 
 sync_artifactory_drop(){
-    wget --user=reader --password="Amd12345" -r "http://cloud-gpu-artifactory:8082/artifactory/$1" -P "/home/drop/" --no-parent --reject=html -nH --level=inf
-    rm -rf $(fd index.html /home/drop)
+    start=$(date)
+    echo "Crawling all files in artifactory start from $start"
+    wget --user=reader --password="Amd12345" -r "http://cloud-gpu-artifactory:8082/artifactory/$1" -P "/home/drop/" --no-parent --spider -nv --output-file="/tmp/spider.log" -nH --level=inf
+    cat /tmp/spider.log | grep -oE "http[^ ]+" > /tmp/files.log
+    sed -ir "s/http:\/\/cloud-gpu-artifactory:8082\/robots.txt.*//g" /tmp/files.log
+    sed -ir "s/http:\/\/cloud-gpu-artifactory:8082\/artifactory\///g" /tmp/files.log
+
+    file_content="/tmp/files.log" # get filename from command line argument
+    prefix="http://cloud-gpu-artifactory:8082/artifactory/"
+    output_folder="/home/drop/artifactory/"
+    thread_limit=6
+
+    while read -r line
+    do
+        if [ "$line" ] # skip blank lines
+        then
+            if [[ "$line" =~ \/$ ]] # line contains a URL, download file
+            then
+                echo "Directory: '$line'"
+            else # line contains a directory name, create directory if not already present
+                echo "Url: '$prefix$line'"
+                currdir=$(dirname "$output_folder$line")
+                while [ "$thread_limit" -lt "$(ps aux | grep aria2c -c)" ];
+                do
+                    sleep 1
+                done
+                aria2c --http-user=reader --http-passwd=Amd12345 --file-allocation=none -c -x 10 -s 10 -d "$currdir" "$prefix$line"&
+            fi
+        fi
+    done < "$file_content"
+
+    while [ "1" -ne "$(ps aux | grep aria2c -c)" ];
+    do
+        sleep 1
+    done
+    rm /tmp/spider.log /tmp/files.log
+    echo download finish! $start --- $(date)
     #jfrog rt dl --url="http://10.67.85.182:8082/artifactory" --user="jingwech" --password="$ACCOUNT_PW" --recursive=true "$1(*)" "/home/drop/{1}"
 
 }
