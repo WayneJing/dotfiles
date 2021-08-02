@@ -1,10 +1,14 @@
 # -*- Mode: Mutt -*-
 # config for the lincoln@clarete.li account
-set sort = 'reverse-date'
+#set sort = 'reverse-date'
 set edit_headers = yes
 set editor = 'vim +/^$ +nohlsearch' # Move past headers
 set folder_format = '%4C %t %f'
-set sort_aux = reverse-last-date-received		# and the thread themselves reverse-date
+#set sort_aux = reverse-last-date-received		# and the thread themselves reverse-date
+set sort = 'threads'
+set sort_browser="reverse-date"
+set sort_aux="last-date-received"
+unset collapse_unread
 set uncollapse_jump                        # don't collapse on an unread message
 set sort_re                                # thread based on regex
 set reply_regexp = "^(([Rr][Ee]?(\[[0-9]+\])?: *)?(\[[^]]+\] *)?)*"
@@ -44,7 +48,7 @@ bind pager                      gg  top
 bind pager                      G   bottom
 bind pager                      k   previous-line
 bind pager                      j   next-line
-
+bind attach,browser,index       gr  group-chat-reply
 # Scrolling
 bind attach,browser,pager,index \CF next-page
 bind attach,browser,pager,index \CB previous-page

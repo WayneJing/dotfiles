@@ -142,11 +142,11 @@ bindsym $mod+Shift+8 move container to workspace $ws8; workspace $ws8
 bindsym $mod+Shift+9 move container to workspace $ws9; workspace $ws9
 # Open specific applications in floating mode
 assign [class="[cC]ode"] $ws4
-assign [class="Firefox"] $ws2
+assign [class="Google-chrome"] $ws2
 assign [class="[mM]icrosoft [tT]eams - [pP]review"] $ws5
 
 for_window[class=^.*] border pixel 0
-for_window[class="Calculator"] floating enable
+for_window[class="copyq"] floating enable
 for_window[window_role="pop-up"] floating enable
 for_window[window_role="task_dialog"] floating enbale
 for_window[class="ranger"]floating enable
@@ -275,6 +275,7 @@ mode "$mode_gaps_outer" {
 exec --no-startup-id mate-power-manager
 exec_always --no-startup-id exec $HOME/.config/picom/start.sh
 exec_always --no-startup-id exec barrier
+exec_always --no-startup-id exec copyq
 exec_always --no-startup-id exec fetchmail -f $HOME/.fetchmailrc
 exec_always --no-startup-id exec /home/wayne/work/activitywatch-v0.10.0-linux-x86_64/activitywatch/aw-qt
 

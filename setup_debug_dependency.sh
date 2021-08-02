@@ -7,7 +7,7 @@ sudo apt install zsh -y
 
 #install ohmyzsh
 cd ~
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+sh -c "$(wget https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 cp $repo_path/ys.zsh-theme ~/.oh-my-zsh/themes
 #install zsh plugins
 cd ~/.oh-my-zsh/plugins
@@ -21,7 +21,7 @@ git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
 
 #install fd-find
 wget https://github.com/sharkdp/fd/releases/download/v8.2.1/fd_8.2.1_amd64.deb
-dpkg -i fd_*.deb
+sudo dpkg -i fd_*.deb
 
 #install ccat
 wget https://github.com/owenthereal/ccat/releases/download/v1.1.0/linux-amd64-1.1.0.tar.gz

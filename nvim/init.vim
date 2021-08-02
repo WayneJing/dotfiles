@@ -80,7 +80,7 @@ set fileencodings=utf8,ucs-bom,gbk,cp936,gb2312,gb18030
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " gvim/macvim设置
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-set guifont=FiraCode\ Nerd\ Font\ Mono:h12
+set guifont=FiraCode\ Nerd\ Font:h12
 """ PlugInstall
 call plug#begin('~/.local/share/nvim/plugged')
 Plug 'mhinz/vim-startify'
@@ -121,8 +121,7 @@ Plug 'liuchengxu/vim-clap', { 'do': function('clap#installer#build_all')}
 Plug 'tpope/vim-fugitive'
 Plug 'junegunn/gv.vim'
 Plug 'terryma/vim-smooth-scroll'
-Plug 'easymotion/vim-easymotion'
-Plug 'ActivityWatch/aw-watcher-vim'
+"Plug 'easymotion/vim-easymotion'
 call plug#end()
 
 """PlugConfig
@@ -460,8 +459,8 @@ noremap <silent> <c-u> :call smooth_scroll#up(&scroll, 0, 2)<CR>
 noremap <silent> <c-d> :call smooth_scroll#down(&scroll, 0, 2)<CR> 
 
 "easymotion
-map  / <Plug>(easymotion-sn)
-omap / <Plug>(easymotion-tn)
+"map  / <Plug>(easymotion-sn)
+"omap / <Plug>(easymotion-tn)
 
 autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | execute "normal! g'\"" | endif
 " These `n` & `N` mappings are options. You do not have to map `n` & `N` to EasyMotion.

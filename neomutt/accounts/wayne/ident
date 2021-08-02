@@ -3,4 +3,5 @@
 # Identification information
 set realname = 'Jingwen Chen'
 set from = 'Jingwen.Chen2@amd.com'
+set smtp_url= 'cybsmtp10.amd.com'
 set sig_dashes='no'
