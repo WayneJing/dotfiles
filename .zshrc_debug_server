@@ -116,17 +116,17 @@ killtestvm() {
     real_list=$(echo $vm_list | tail -n $(expr $lines - 2))
     if [ ! -n "$1"   ]; then
 
-        vm=$(echo $real_list | fzf | awk -F" " '{print $2}')
+        vm=$(echo $real_list | fzy | awk -F" " '{print $2}')
 
         virsh destroy $vm
     elif [ 0 -eq `echo $1 | grep -cEi "[a-zA-Z]+"` ]; then
         for i in {1..$1};
         do
-            vm=$(echo $real_list | fzf -q "vatstest '-$(echo $(printf "%02d" $i))" -1| awk -F" " '{print $2}')
+            vm=$(echo $real_list | fzy -e "vatstest$(echo $(printf "%02d" $i))" | head -n 1 | awk -F" " '{print $2}')
             virsh destroy $vm
         done
     else
-        vm=$(echo $real_list | fzf -q "$1" | awk -F" " '{print $2}')
+        vm=$(echo $real_list | fzy -q "$1" | awk -F" " '{print $2}')
         virsh destroy $vm
     fi
 }
@@ -139,17 +139,17 @@ launchtestvm(){
     real_list=$(echo $vm_list | tail -n $(expr $lines - 2))
     if [ ! -n "$1"   ]; then
 
-        vm=$(echo $real_list | fzf | awk -F" " '{print $2}')
+        vm=$(echo $real_list | fzy | awk -F" " '{print $2}')
 
         virsh start $vm
     elif [ 0 -eq `echo $1 | grep -cEi "[a-zA-Z]+"` ]; then
         for i in {1..$1};
         do
-            vm=$(echo $real_list | fzf -q "vatstest '-$(echo $(printf "%02d" $i))" -1| awk -F" " '{print $2}')
+            vm=$(echo $real_list | fzy -e "vatstest$(echo $(printf "%02d" $i))" | head -n 1| awk -F" " '{print $2}')
             virsh start $vm
         done
     else
-        vm=$(echo $real_list | fzf -q "$1" | awk -F" " '{print $2}')
+        vm=$(echo $real_list | fzy -q "$1" | awk -F" " '{print $2}')
         virsh start $vm
     fi
 }
@@ -161,15 +161,15 @@ get_vm_ip(){
     lines=$(echo $vm_list | wc -l)
     real_list=$(echo $vm_list | tail -n $(expr $lines - 2))
     if [ ! -n "$1" ];then
-        vm=$(echo $real_list | fzf | awk -F" " '{print $2}')
+        vm=$(echo $real_list | fzy | awk -F" " '{print $2}')
 
     elif [ 0 -eq `echo $1 | grep -cEi "[a-zA-Z]+"`  ]; then
 
 
-        vm=$(echo $real_list | fzf -q "vatstest '-$(echo $(printf "%02d" $1))" -1 | awk -F" " '{print $2}')
+        vm=$(echo $real_list | fzy -e "vatstest$(echo $(printf "%02d" $1))"|head -n 1 | awk -F" " '{print $2}')
         # ip=$(arp -a | grep -o ".*$mac" | head -n 1 | grep -o "(.*)" | grep -o "[^()]*")
     else
-        vm=$(echo $real_list | fzf -q "$1" | awk -F" " '{print $2}')
+        vm=$(echo $real_list | fzy -q "$1" | awk -F" " '{print $2}')
     fi
     if [ ! -n "$vm" ]; then
         echo error match empty vm name
@@ -210,7 +210,7 @@ source ~/.passwdrc
 stest(){
     realpath $1
     test_case_list=$($1 &)
-    echo $test_case_list | fzf --height 40% > selected
+    echo $test_case_list | grep -oE "^[0-9]*:.*"| fzy > selected
     test_case=$(cat selected | awk -F":" '{print $1}')
     timestamp=$(date +%s)
     echo ": $timestamp:0;$1 $test_case" >> ~/.zsh_history
