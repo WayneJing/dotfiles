@@ -255,6 +255,7 @@ sync_artifactory_drop(){
     done
     rm /tmp/spider.log /tmp/files.log
     echo download finish! $start --- $(date)
+    echo please find drop in $output_folder$1
     #jfrog rt dl --url="http://10.67.85.182:8082/artifactory" --user="jingwech" --password="$ACCOUNT_PW" --recursive=true "$1(*)" "/home/drop/{1}"
 
 }

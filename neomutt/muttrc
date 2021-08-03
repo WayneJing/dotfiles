@@ -4,10 +4,10 @@
 set edit_headers = yes
 set editor = 'vim +/^$ +nohlsearch' # Move past headers
 set folder_format = '%4C %t %f'
-#set sort_aux = reverse-last-date-received		# and the thread themselves reverse-date
+set sort_aux = reverse-last-date-received		# and the thread themselves reverse-date
 set sort = 'threads'
 set sort_browser="reverse-date"
-set sort_aux="last-date-received"
+#set sort_aux="last-date-received"
 unset collapse_unread
 set uncollapse_jump                        # don't collapse on an unread message
 set sort_re                                # thread based on regex
