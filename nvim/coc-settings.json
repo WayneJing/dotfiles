@@ -1,7 +1,6 @@
 {
   "list.source.files.defaultOptions": ["--number-select"],
   "python.linting.enabled":false,
-  "python.formatting.provider": "black",
   "git.enableGutters": true,
   "clangd.enabled": true,
   "clangd.checkUpdates": true,

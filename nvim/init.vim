@@ -122,6 +122,7 @@ Plug 'tpope/vim-fugitive'
 Plug 'junegunn/gv.vim'
 Plug 'terryma/vim-smooth-scroll'
 "Plug 'easymotion/vim-easymotion'
+Plug 'vn-ki/coc-clap'
 call plug#end()
 
 """PlugConfig
@@ -354,7 +355,6 @@ command! -bang -nargs=* Rg
 let g:ackprg = 'rg --vimgrep -S -e '
 nnoremap <silent> <Leader>A :Ack! <C-R>=expand("<cword>")<CR><CR>
 command! -bang -nargs=* MRU call fzf#vim#history(fzf#vim#with_preview())
-
 nnoremap <Leader>e :CocCommand explorer<CR>
 
 """defx config
