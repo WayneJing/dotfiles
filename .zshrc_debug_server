@@ -327,7 +327,6 @@ get_latest_rc() {
     cd $DOTFILE_PATH
     git clean -f -d -x
     git pull
-    src
     cd $original_path
 }
 get_latest_rc
