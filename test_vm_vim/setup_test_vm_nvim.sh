@@ -1,5 +1,6 @@
 #!/bin/sh
 #install fzf
+path=$(pwd)
 cd ~
 git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
 ~/.fzf/install
@@ -21,11 +22,11 @@ sudo n lts
 
 sudo snap install universal-ctags
 
-cp -r ./nvim $HOME/.config
+cp -r $path/nvim $HOME/.config
 mkdir -p $HOME/.local/share/nvim/
-cp -r ./site $HOME/.local/share/nvim/
+cp -r $path/site $HOME/.local/share/nvim/
 
 nvim -c PlugInstall
-
+sudo update-alternatives --install /usr/bin/vim vim /usr/bin/nvim 200
 echo open nvim and use the following cmd:
 echo CocInstall coc-marketplace coc-format-json coc-actions coc-pyright coc-clangd coc-json 

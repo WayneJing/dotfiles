@@ -20,13 +20,10 @@ git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
 ~/.fzf/install
 
 #install fd-find
-wget https://github.com/sharkdp/fd/releases/download/v8.2.1/fd_8.2.1_amd64.deb
-sudo dpkg -i fd_*.deb
+sudo apt install -y fd-find
 
 #install ccat
-wget https://github.com/owenthereal/ccat/releases/download/v1.1.0/linux-amd64-1.1.0.tar.gz
-tar xvf linux*.tar.gz
-sudo cp $(pwd)/linux-amd64*/ccat /usr/bin
+sudo apt install -y bat
 
 #install sshpass
 sudo apt install sshpass -y
@@ -46,7 +43,7 @@ sudo npm install npm@latest -g
 sudo npm install n -g
 sudo n lts
 #install universal-ctags
-sudo snap install universal-ctags*.snap --dangerous
+sudo apt install universal-ctags
 
 #deploy neovim
 cp -rf $repo_path/nvim/ ~/.config

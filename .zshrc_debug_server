@@ -97,14 +97,14 @@ source $ZSH/oh-my-zsh.sh
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
-
+alias bat="batcat"
 export JFROG_CLI_OFFER_CONFIG=false
 #export FZF_DEFAULT_OPTS="--height 40% --layout=reverse --preview '(highlight -O ansi {} || cat {}) 2> /dev/null | head -500'"
 export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git'
 
-export FZF_DEFAULT_OPTS='--height 40% --layout=reverse --preview "[[ $(file --mime {}) =~ binary  ]] && echo {} is a binary file || (ccat --color=always {} || highlight -O ansi -l {} || cat {}) 2> /dev/null | head -500"'
+export FZF_DEFAULT_OPTS='--height 40% --layout=reverse --preview "[[ $(file --mime {}) =~ binary  ]] && echo {} is a binary file || (bat --color=always {} || highlight -O ansi -l {} || bat {}) 2> /dev/null | head -500"'
 export FZF_COMPLETION_TRIGGER='\'
-export FZF_PREVIEW_COMMAND='[[ $(file --mime {}) =~ binary  ]] && echo {} is a binary file || (ccat --color=always {} || highlight -O ansi -l {} || cat {}) 2> /dev/null | head -500'
+export FZF_PREVIEW_COMMAND='[[ $(file --mime {}) =~ binary  ]] && echo {} is a binary file || (bat --color=always {} || highlight -O ansi -l {} || bat {}) 2> /dev/null | head -500'
 
 export TERM=screen-256color
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
@@ -211,7 +211,7 @@ stest(){
     realpath $1
     test_case_list=$($1 &)
     echo $test_case_list | grep -oE "^[0-9]*:.*"| fzy > selected
-    test_case=$(cat selected | awk -F":" '{print $1}')
+    test_case=$(bat selected | awk -F":" '{print $1}')
     timestamp=$(date +%s)
     echo ": $timestamp:0;$1 $test_case" >> ~/.zsh_history
     $1 $test_case
@@ -221,7 +221,7 @@ sync_artifactory_drop(){
     start=$(date)
     echo "Crawling all files in artifactory start from $start"
     wget --user=reader --password="Amd12345" -r "http://cloud-gpu-artifactory:8082/artifactory/$1" -P "/home/drop/" --no-parent --spider -nv --output-file="/tmp/spider.log" -nH --level=inf
-    cat /tmp/spider.log | grep -oE "http[^ ]+" > /tmp/files.log
+    bat /tmp/spider.log | grep -oE "http[^ ]+" > /tmp/files.log
     sed -ir "s/http:\/\/cloud-gpu-artifactory:8082\/robots.txt.*//g" /tmp/files.log
     sed -ir "s/http:\/\/cloud-gpu-artifactory:8082\/artifactory\///g" /tmp/files.log
 
@@ -262,7 +262,7 @@ sync_artifactory_drop(){
 
 change_kernel(){
     uname -r
-    kernel_list=$(cat /boot/grub/grub.cfg | grep -i "menuentry_id_option .*" | grep -v simple | grep -io "menuentry_id_option [^{]*"| awk -F" " '{print $2}' |awk -F"'" '{print $2}')
+    kernel_list=$(bat /boot/grub/grub.cfg | grep -i "menuentry_id_option .*" | grep -v simple | grep -io "menuentry_id_option [^{]*"| awk -F" " '{print $2}' |awk -F"'" '{print $2}')
     valid_kernel=$(echo $kernel_list| grep advanced)
     arr=()
     while read -r line; do
@@ -283,7 +283,7 @@ change_kernel(){
     num=$(expr $(echo $kernel_list | grep $selected -n | awk -F":" '{print $1}') - 2)
     str="1>$num"
     echo $str
-    default=$(cat /etc/default/grub | grep "GRUB_DEFAULT" | awk -F"=" '{print $2}' | awk -F'"' '{print $2}')
+    default=$(bat /etc/default/grub | grep "GRUB_DEFAULT" | awk -F"=" '{print $2}' | awk -F'"' '{print $2}')
     echo $default
     sed -ir "s/$default/$str/g" /etc/default/grub
     update-grub
