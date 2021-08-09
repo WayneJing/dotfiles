@@ -325,8 +325,13 @@ export DOTFILE_PATH="$HOME/dotfiles"
 get_latest_rc() {
     original_path=$(pwd)
     cd $DOTFILE_PATH
+    old_commit=$(git log --oneline | head -n 1 | awk -F " " '{print $1}')
     git clean -f -d -x
     git pull
+    new_commit=$(git log --oneline | head -n 1 | awk -F " " '{print $1}')
+    if [ "$old_commit" != "$new_commit" ]; then
+        src
+    fi
     cd $original_path
 }
 get_latest_rc
