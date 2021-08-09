@@ -330,7 +330,7 @@ get_latest_rc() {
     src
     cd $original_path
 }
-autoload get_latest_rc
+get_latest_rc
 bindkey "\e[8~" end-of-line
 bindkey "\e[7~" beginning-of-line
 bindkey "\eOH" beginning-of-line
