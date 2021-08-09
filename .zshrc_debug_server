@@ -293,7 +293,7 @@ change_kernel(){
 
 pci_link(){
     operation_list="down\nup"
-    opetation=$(echo $operation_list|fzf)
+    opetation=$(echo $operation_list|fzy)
 
     if [ "down" = $opetation ]; then
         bus_id=$(lspci | grep ATI | grep Display | fzy | awk -F' ' '{print $1}')
