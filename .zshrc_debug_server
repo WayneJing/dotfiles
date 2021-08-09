@@ -270,9 +270,9 @@ change_kernel(){
     done <<< $valid_kernel
     if [ ! -n "$1"  ]; then
 
-        selected=$(echo ${arr[@]:1}| awk '$1=$1' | fzf )
+        selected=$(echo ${arr[@]:1}| awk '$1=$1' | fzy )
     else
-        selected=$(echo ${arr[@]:1}| awk '$1=$1' | fzf -q "$1")
+        selected=$(echo ${arr[@]:1}| awk '$1=$1' | fzy -q "$1")
     fi
 
     echo $selected
@@ -296,7 +296,7 @@ pci_link(){
     opetation=$(echo $operation_list|fzf)
 
     if [ "down" = $opetation ]; then
-        bus_id=$(lspci | grep ATI | grep Display | fzf | awk -F' ' '{print $1}')
+        bus_id=$(lspci | grep ATI | grep Display | fzy | awk -F' ' '{print $1}')
         echo 1 > /sys/bus/pci/devices/0000:$bus_id/remove
     else
         echo 1 > /sys/bus/pci/devices/0000:00:01.0/rescan
