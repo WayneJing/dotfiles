@@ -323,10 +323,12 @@ sync_file_from_vm(){
 }
 export DOTFILE_PATH="$HOME/dotfiles"
 get_latest_rc() {
+    original_path=$(pwd)
     cd $DOTFILE_PATH
     git clean -f -d -x
     git pull
     src
+    cd $original_path
 }
 autoload get_latest_rc
 bindkey "\e[8~" end-of-line
