@@ -321,6 +321,14 @@ sync_file_from_vm(){
     get_vm_ip
     sync_file $ip:$1 $2 'amd1234'
 }
+export DOTFILE_PATH="$HOME/dotfiles"
+get_latest_rc() {
+    cd $DOTFILE_PATH
+    git clean -f -d -x
+    git pull
+    src
+}
+autoload get_latest_rc
 bindkey "\e[8~" end-of-line
 bindkey "\e[7~" beginning-of-line
 bindkey "\eOH" beginning-of-line
