@@ -16,6 +16,7 @@ sudo apt-get install neovim -y
 
 #install node
 sudo apt install npm -y
+sudo npm config set registry http://registry.npm.taobao.org
 sudo npm install npm@latest -g
 sudo npm install n -g
 sudo n lts

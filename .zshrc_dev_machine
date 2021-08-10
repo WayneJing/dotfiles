@@ -234,6 +234,11 @@ ipmihelper() {
 
 }
 
+unalias l
+unalias ll
+alias l="exa -lhmF --git"
+alias ll="exa -lhmFa --git"
+
 function set-title-precmd() {
   printf "\e]2;%s\a" "${PWD/#$HOME/~}"
 }
