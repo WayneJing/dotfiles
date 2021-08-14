@@ -315,9 +315,9 @@ pci_link(){
 
 sync_file(){
     if [ ! -n "$3" ]; then
-        rsync -Pa -e 'sshpass -p root ssh -l root' $1 $2
+        rsync -Pa -e 'sshpass -p root ssh -l root' "$1" "$2"
     else
-        rsync -Pa -e "sshpass -p $3 ssh -l root" $1 $2
+        rsync -Pa -e "sshpass -p $3 ssh -l root" "$1" "$2"
     fi
 }
 

@@ -352,10 +352,9 @@ command! -bang -nargs=* Rg
             \                 <bang>0 ? fzf#vim#with_preview('up:60%')
             \                         : fzf#vim#with_preview('right:50%', '?'),
             \                 <bang>0)
-let g:ackprg = 'rg --vimgrep -S -e '
+let g:ackprg = 'rg --vimgrep --smart-case --glob !tags -e '
 nnoremap <silent> <Leader>A :Ack! <C-R>=expand("<cword>")<CR><CR>
 command! -bang -nargs=* MRU call fzf#vim#history(fzf#vim#with_preview())
-nnoremap <Leader>e :CocCommand explorer<CR>
 
 """defx config
 "call defx#custom#option('_', {
@@ -478,3 +477,6 @@ autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | execute "
 "nnoremap <silent> <Leader>N :NERDTreeToggle<CR>
 "nmap <leader>nf :NERDTreeFind
 "let NERDTreeStatusline="%{exists('b:NERDTree')?fnamemodify(b:NERDTree.root.path.str(), ':~'):''}"
+if filereadable(".vimrc")
+    source .vimrc
+endif

@@ -121,16 +121,16 @@ alias brahma="cd ~/work/brahma"
 unalias z
 z() {
   if [[ -z "$*" ]]; then
-    cd "$(_z -l 2>&1 | fzf +s --tac | sed 's/^[0-9,.]* *//')"
+    cd "$(_z -l 2>&1 | fzy -s | sed 's/^[0-9,.]* *//')"
   else
     _last_z_args="$@"
     _z "$@"
   fi
 }
 
-alias glNoGraph='git log --color=always --format="%C(auto)%h%d %s %C(black)%C(bold)%cr% C(auto)%an" "$@"'
+alias glNoGraph='git log --color=always --format="%C(auto)%h%d %s %C(black)%C(bold)%cr% C(auto)%an%C(auto)%b" "$@"'
 _gitLogLineToHash="echo {} | grep -o '[a-f0-9]\{7\}' | head -1"
-_viewGitLogLine="$_gitLogLineToHash | xargs -I % sh -c 'git show --color=always % | diff-so-fancy'"
+_viewGitLogLine="$_gitLogLineToHash | xargs -I % sh -c 'git show --color=always % | delta'"
 
 # fcoc_preview - checkout git commit with previews
 fcoc() {
