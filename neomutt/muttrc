@@ -48,7 +48,7 @@ bind pager                      gg  top
 bind pager                      G   bottom
 bind pager                      k   previous-line
 bind pager                      j   next-line
-bind attach,browser,index       gr  group-chat-reply
+bind attach,browser,pager,index       gr  group-chat-reply
 # Scrolling
 bind attach,browser,pager,index \CF next-page
 bind attach,browser,pager,index \CB previous-page

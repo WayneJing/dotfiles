@@ -90,9 +90,9 @@ set $ws2 "2:Website"
 set $ws3 "3:vim"
 set $ws4 "4:VSCode"
 set $ws5 "5:Teams"
-set $ws6 "6:Other"
+set $ws6 "6:Mail"
 set $ws7 "7:ssh remote"
-set $ws8 "8:activity watch"
+set $ws8 "8:Notebook"
 set $ws9 "9:misc"
 
 workspace $ws1 output DVI-D-0
@@ -104,8 +104,8 @@ workspace $ws5 output HDMI-0
 workspace $ws7 output DVI-D-0
 workspace $ws8 output DVI-D-0
 workspace $ws9 output DVI-D-0
-bindsym $mod+Alt+Left move container to output HDMI-0 
-bindsym $mod+Alt+Right move container to output DVI-D-0
+bindsym $mod+Ctrl+minus move workspace to output HDMI-0 
+bindsym $mod+Ctrl+plus move workspace to output DVI-D-0
 
 # switch to workspace
 bindsym $mod+1 workspace $ws1
