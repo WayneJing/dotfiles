@@ -48,7 +48,7 @@ bind pager                      gg  top
 bind pager                      G   bottom
 bind pager                      k   previous-line
 bind pager                      j   next-line
-bind attach,browser,pager,index       gr  group-chat-reply
+bind attach,browser,pager,index       gr  group-reply
 # Scrolling
 bind attach,browser,pager,index \CF next-page
 bind attach,browser,pager,index \CB previous-page
@@ -100,7 +100,7 @@ bind pager <space> next-page
 macro index A \
     "<tag-pattern>~N<enter><tag-prefix><clear-flag>N<untag-pattern>.<enter>" \
     "mark all new as read"
-
+macro index <F5> "!fetchmail \n"
 source ~/.mutt/color/dracula.rc
 source ~/.mutt/accounts/wayne/ident
 source ~/.mutt/accounts/wayne/maildir

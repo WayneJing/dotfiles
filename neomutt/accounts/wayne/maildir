@@ -2,11 +2,10 @@
 
 # Configuration to be used with a Maildir
 #mailboxes =inbox
-mailboxes =brahmadev
+mailboxes =brahmadev =dri-devel =inbox
 
 set mbox_type="Maildir"
 
-#set mbox="~/Mail/inbox"
 
-set mbox="~/Mail/brahmadev"
+set mbox="~/Mail/inbox"
 set spoolfile="~/Mail/inbox"

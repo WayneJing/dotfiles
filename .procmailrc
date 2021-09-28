@@ -13,10 +13,14 @@ brahmadev/
 * ^Cc:.*(amd-gfx\@lists.freedesktop.org|brahma_sw_dev\@amd.com)
 brahmadev/
 
-:0
-* ^Subject:.*(Libgv\ daily\ promotion)
-libgv_daily/
 
+:0
+* ^To:.*(dri-devel\@lists.freedesktop.org)
+dri-devel/
+
+:0
+* ^Cc:.*(dri-devel\@lists.freedesktop.org)
+dri-devel/
 # 其它所有都存到收件箱中
 :0:
 inbox/

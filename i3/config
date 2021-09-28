@@ -89,7 +89,7 @@ set $ws1 "1:Terminal"
 set $ws2 "2:Website"
 set $ws3 "3:vim"
 set $ws4 "4:VSCode"
-set $ws5 "5:Teams"
+set $ws5 "5:RDP"
 set $ws6 "6:Mail"
 set $ws7 "7:ssh remote"
 set $ws8 "8:Notebook"
@@ -143,7 +143,8 @@ bindsym $mod+Shift+9 move container to workspace $ws9; workspace $ws9
 # Open specific applications in floating mode
 assign [class="[cC]ode"] $ws4
 assign [class="Google-chrome"] $ws2
-assign [class="[mM]icrosoft [tT]eams - [pP]review"] $ws5
+assign [class=".*remmina.*"] $ws5
+assign [class="Thunderbird"] $ws6
 
 for_window[class=^.*] border pixel 0
 for_window[class="copyq"] floating enable
@@ -274,10 +275,8 @@ mode "$mode_gaps_outer" {
 # set power-manager and volume control
 exec --no-startup-id mate-power-manager
 exec_always --no-startup-id exec $HOME/.config/picom/start.sh
-exec_always --no-startup-id exec barrier
+exec_always --no-startup-id exec fetchmail
 exec_always --no-startup-id exec copyq
-exec_always --no-startup-id exec fetchmail -f $HOME/.fetchmailrc
-exec_always --no-startup-id exec /home/wayne/work/activitywatch-v0.10.0-linux-x86_64/activitywatch/aw-qt
 
 bindsym XF86AudioRaiseVolume exec --no-startup-id amixer -c 0 -q set Master 2dB+ unmute
 bindsym XF86AudioLowerVolume exec --no-startup-id amixer -c 0 -q set Master 2db- unmute
