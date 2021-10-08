@@ -117,7 +117,7 @@ z() {
     _z "$@"
   fi
 }
-killtestvm() {
+_killtestvm() {
 
     vm=$1
     vm_list=$(virsh list --all)
@@ -140,7 +140,7 @@ killtestvm() {
     fi
 }
 
-launchtestvm(){
+_launchtestvm(){
 
     vm=$1
     vm_list=$(virsh list --all)
@@ -163,12 +163,12 @@ launchtestvm(){
     fi
 }
 
-get_vm_ip(){
+_get_vm_ip(){
 
     vm=$1
-    vm_list=$(virsh list )
-    lines=$(echo $vm_list | wc -l)
-    real_list=$(echo $vm_list | tail -n $(expr $lines - 2))
+    local vm_list=$(virsh list )
+    local lines=$(echo $vm_list | wc -l)
+    local real_list=$(echo $vm_list | tail -n $(expr $lines - 2))
     if [ ! -n "$1" ];then
         vm=$(echo $real_list | fzy | awk -F" " '{print $2}')
 
@@ -184,13 +184,12 @@ get_vm_ip(){
         echo error match empty vm name
         return -1
     fi
-    mac=""
+    local mac=""
     while [ ! -n "$mac" ]
     do
         sleep 1
 
         mac=$(virsh dumpxml --domain $vm | grep -io "mac address='.*'" | awk -F"'" '{print $2}' )
-        echo mac of $vm is $mac
     done
     ip=""
     while [ ! -n "$ip" ]
@@ -200,12 +199,48 @@ get_vm_ip(){
     done
     until nc -vzw 2 $ip 22; do sleep 2; done
     echo vm ip:$ip
+    return 0
 }
-vmconnect(){
-    get_vm_ip $1
-    ssh-keygen -f "/root/.ssh/known_hosts" -R "$ip"
-    sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$ip $2
+
+vmc(){
+    case $1 in
+        connect)
+            _get_vm_ip $2
+            ssh-keygen -f "/root/.ssh/known_hosts" -R "$ip"
+            sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$ip $3
+            ;;
+        console)
+            ret=$(_get_vm_ip $2)
+            if [ 0 -eq $ret ]; then
+                virsh console --domain $vm
+            fi
+            ;;
+        launch)
+            _launchtestvm $2
+            ;;
+        kill)
+            _killtestvm $2
+            ;;
+        *)
+            echo "Undefined command!"
+            ;;
+    esac
 }
+
+complete -F _vmc_complete_func vmc
+_vmc_complete_func() {
+    local cur prev opts
+    COMPREPLY=()
+    cur="${COMP_WORDS[COMP_CWORD]}"
+    prev="${COMP_WORDS[COMP_CWORD-1]}"
+    opts="connect console launch kill"
+
+    if [[ ${cur} == * ]]; then
+        COMPREPLY=( $(compgen -W "$(opts)" -- ${cur}) )
+        return 0
+    fi
+}
+
 fix_corrupt_history(){
     mv ~/.zsh_history ~/.zsh_history_bad
 
