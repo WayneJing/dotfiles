@@ -236,7 +236,7 @@ _vmc_complete_func() {
     opts="connect console launch kill"
 
     if [[ ${cur} == * ]]; then
-        COMPREPLY=( $(compgen -W "$(opts)" -- ${cur}) )
+        COMPREPLY=( $(compgen -W "${opts}" -- ${cur}) )
         return 0
     fi
 }
