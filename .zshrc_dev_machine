@@ -112,12 +112,6 @@ export FZF_PREVIEW_COMMAND='[[ $(file --mime {}) =~ binary ]] && echo {} is a bi
 
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-alias sshsuper1="echo -e \"\e]2;sshsuper1 ip 10.67.93.99 ipmi 10.67.86.110\007\";sshpass -p 'root' ssh -X root@10.67.93.99"
-alias sshfoxconn="echo -e \"\e]2;sshfoxconn ip 10.67.245.255 ipmi 10.67.81.185\007\";sshpass -p root ssh -X root@10.67.245.255"
-alias sshsuper2="echo -e \"\e]2;sshsuper2 ip 10.67.82.42 ipmi 10.67.82.21 passwd 12345678\007\";sshpass -p root ssh -X root@10.67.82.42"
-alias vats="cd ~/work/vats2"
-alias libgv="cd ~/work/libgv"
-alias brahma="cd ~/work/brahma"
 unalias z
 z() {
   if [[ -z "$*" ]]; then
@@ -182,6 +176,31 @@ change_konsole_title() {
 change_title() {
     echo -e "\e]2;$1\007"
 }
+
+sconnect() {
+    case $1 in
+        super1)
+            change_title "sshsuper1 ip 10.67.93.99 ipmi 10.67.86.110"
+            sshpass -p 'root' ssh -X root@10.67.93.99
+            ;;
+        super2)
+            change_title "sshsuper2 ip 10.67.82.42 ipmi 10.67.82.21 passwd 12345678"
+            sshpass -p root ssh -X root@10.67.82.42
+            ;;
+        foxconn)
+            change_title "sshfoxconn ip 10.67.245.255 ipmi 10.67.81.185"
+            sshpass -p root ssh -X root@10.67.245.255
+            ;;
+          *)
+            if [ "" = "$4" ]; then
+                sshpass -p amd1234 ssh -X $3@$2
+            else
+                sshpass -p $4 ssh -X $3@$2
+            fi
+            ;;
+        esac
+}
+
 ipmihelper() {
     machine_name_list='super1\nsuper2\nfoxconn'
     #echo $machine_name_list
@@ -258,3 +277,4 @@ add-zsh-hook preexec set-title-preexec
 export TERM=xterm-256color
 fpath+=${ZDOTDIR:-~}/.zsh_functions
 fpath+=${ZDOTDIR:-~}/.zsh_functions
+source ./completion_keyword
