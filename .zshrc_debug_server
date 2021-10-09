@@ -210,8 +210,10 @@ vmc(){
             sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$ip $3
             ;;
         console)
-            ret=$(_get_vm_ip $2)
-            if [ 0 -eq $ret ]; then
+            _get_vm_ip $2
+            if [ ! -n "$ip" ]; then
+                echo invalid param
+            else
                 virsh console --domain $vm
             fi
             ;;
