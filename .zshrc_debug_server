@@ -214,7 +214,7 @@ vmc(){
             if [ ! -n "$ip" ]; then
                 echo invalid param
             else
-                virsh console --domain $vm
+                virsh console --domain $vm --force
             fi
             ;;
         launch)
