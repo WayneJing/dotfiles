@@ -21,8 +21,9 @@ git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
 
 #install fd-find
 sudo apt install -y fd-find
+sudo apt install -y fzy
 
-#install ccat
+#install bat
 sudo apt install -y bat
 
 #install sshpass
@@ -31,6 +32,8 @@ sudo apt install sshpass -y
 #install rg
 sudo apt-get install ripgrep -y
 
+#install aria2
+sudo apt-get install aria2
 #install neovim
 sudo apt-get install python-dev python-pip python3-dev python3-pip -y
 sudo add-apt-repository ppa:neovim-ppa/unstable
