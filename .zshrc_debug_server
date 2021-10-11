@@ -346,12 +346,12 @@ sync_file(){
 }
 
 sync_file_to_vm(){
-    get_vm_ip
+    _get_vm_ip
     sync_file $1 $ip:$2 'amd1234'
 }
 
 sync_file_from_vm(){
-    get_vm_ip
+    _get_vm_ip
     sync_file $ip:$1 $2 'amd1234'
 }
 export DOTFILE_PATH="$HOME/dotfiles"
