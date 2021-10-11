@@ -131,7 +131,7 @@ _killtestvm() {
     elif [ 0 -eq `echo $1 | grep -cEi "[a-zA-Z]+"` ]; then
         for i in {1..$1};
         do
-            vm=$(echo $real_list | fzy -e "vatstest$(echo $(printf "%02d" $i))" | head -n 1 | awk -F" " '{print $2}')
+            vm=$(echo $real_list | fzy -e "vats-test.*$(printf "%02d" $i)" | head -n 1 | awk -F" " '{print $2}')
             virsh destroy $vm
         done
     else
@@ -154,7 +154,7 @@ _launchtestvm(){
     elif [ 0 -eq `echo $1 | grep -cEi "[a-zA-Z]+"` ]; then
         for i in {1..$1};
         do
-            vm=$(echo $real_list | fzy -e "vatstest$(echo $(printf "%02d" $i))" | head -n 1| awk -F" " '{print $2}')
+            vm=$(echo $real_list | grep -e "vats-test.*$(printf "%02d" $i)" | head -n 1| awk -F" " '{print $2}')
             virsh start $vm
         done
     else
@@ -175,7 +175,7 @@ _get_vm_ip(){
     elif [ 0 -eq `echo $1 | grep -cEi "[a-zA-Z]+"`  ]; then
 
 
-        vm=$(echo $real_list | fzy -e "vatstest$(echo $(printf "%02d" $1))"|head -n 1 | awk -F" " '{print $2}')
+        vm=$(echo $real_list | grep -e "vats-test.*$(printf "%02d" $1)"|head -n 1 | awk -F" " '{print $2}')
         # ip=$(arp -a | grep -o ".*$mac" | head -n 1 | grep -o "(.*)" | grep -o "[^()]*")
     else
         vm=$(echo $real_list | fzy -q "$1" | awk -F" " '{print $2}')
@@ -373,4 +373,4 @@ bindkey "\e[7~" beginning-of-line
 bindkey "\eOH" beginning-of-line
 bindkey "\eOF" end-of-line
 
-source ./completion_keyword
+source ~/completion_keyword

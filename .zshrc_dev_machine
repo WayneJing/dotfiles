@@ -277,4 +277,4 @@ add-zsh-hook preexec set-title-preexec
 export TERM=xterm-256color
 fpath+=${ZDOTDIR:-~}/.zsh_functions
 fpath+=${ZDOTDIR:-~}/.zsh_functions
-source ./completion_keyword
+source ~/completion_keyword
