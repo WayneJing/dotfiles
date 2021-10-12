@@ -178,27 +178,25 @@ change_title() {
 }
 
 sconnect() {
+    ip=""
     case $1 in
         super1)
-            change_title "sshsuper1 ip 10.67.93.99 ipmi 10.67.86.110"
-            sshpass -p 'root' ssh -X root@10.67.93.99
+            ip="10.67.93.99"
+            change_title "sshsuper1 ip $ip ipmi 10.67.86.110"
             ;;
         super2)
-            change_title "sshsuper2 ip 10.67.82.42 ipmi 10.67.82.21 passwd 12345678"
-            sshpass -p root ssh -X root@10.67.82.42
+            ip="10.67.82.42"
+            change_title "sshsuper2 ip $ip ipmi 10.67.82.21 passwd 12345678"
             ;;
         foxconn)
-            change_title "sshfoxconn ip 10.67.245.255 ipmi 10.67.81.185"
-            sshpass -p root ssh -X root@10.67.245.255
+            ip="10.67.245.255"
+            change_title "sshfoxconn ip $ip ipmi 10.67.81.185"
             ;;
           *)
-            if [ "" = "$4" ]; then
-                sshpass -p amd1234 ssh -X $3@$2
-            else
-                sshpass -p $4 ssh -X $3@$2
-            fi
             ;;
         esac
+        until nc -vzw 2 $ip 22; do sleep 2; done
+        sshpass -p 'root' ssh -X root@$ip
 }
 
 ipmihelper() {
