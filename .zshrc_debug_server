@@ -163,6 +163,32 @@ _launchtestvm(){
     fi
 }
 
+_show_vm_vf() {
+
+    vm=$1
+    vm_list=$(virsh list --all)
+    lines=$(echo $vm_list | wc -l)
+    real_list=$(echo $vm_list | tail -n $(expr $lines - 2))
+    if [ ! -n "$1"   ]; then
+
+        vm=$(echo $real_list | fzy | awk -F" " '{print $2}')
+
+    elif [ 0 -eq `echo $1 | grep -cEi "[a-zA-Z]+"` ]; then
+        for i in {1..$1};
+        do
+            vm=$(echo $real_list | grep -e "vats-test.*$(printf "%02d" $i)" | head -n 1| awk -F" " '{print $2}')
+            pci_id=$(virsh dumpxml --domain $vm | xmllint --xpath "//hostdev[@mode=\"subsystem\"]/source/address" - | awk -F'["x]' '{printf "%s:%s:%s.%s",$3,$6,$9,$12}')
+            echo $(printf "%-40s --->" $vm) $(lspci -s $pci_id)
+        done
+        return 0
+    else
+        vm=$(echo $real_list | fzy -q "$1" | awk -F" " '{print $2}')
+    fi
+
+    pci_id=$(virsh dumpxml --domain $vm | xmllint --xpath "//hostdev[@mode=\"subsystem\"]/source/address" - | awk -F'["x]' '{printf "%s:%s:%s.%s\n",$3,$6,$9,$12}')
+    echo $(printf "%-40s" $vm) "--->" $(lspci -s $pci_id)
+}
+
 _get_vm_ip(){
 
     vm=$1
@@ -223,6 +249,9 @@ vmc(){
             ;;
         kill)
             _killtestvm $2
+            ;;
+        list-dev)
+            _show_vm_vf $2
             ;;
         *)
             echo "Undefined command!"
