@@ -143,8 +143,10 @@ bindsym $mod+Shift+9 move container to workspace $ws9; workspace $ws9
 # Open specific applications in floating mode
 assign [class="[cC]ode"] $ws4
 assign [class="Google-chrome"] $ws2
+assign [class="Microsoft-edge.*"] $ws2
 assign [class=".*remmina.*"] $ws5
 assign [class="Thunderbird"] $ws6
+assign [class="wolai"] $ws8
 
 for_window[class=^.*] border pixel 0
 for_window[class="copyq"] floating enable
@@ -285,3 +287,14 @@ bindsym XF86AudioMute exec --no-startup-id amixer -q set Master toggle
 # touchpad on and off controller on laptop with Fn+<touchpad control functional key>
 bindsym XF86TouchpadOn exec --no-startup-id synclient Touchpadoff=0
 bindsym XF86TouchpadOff exec --no-startup-id synclient Touchpadoff=1
+
+# launch dev presets
+exec --no-startup-id i3-msg 'workspace $ws7; exec kitty --session=$(realpath ~/dotfiles/kitty/remote_session.conf) -1'
+exec --no-startup-id i3-msg 'workspace $ws3; exec kitty --session=$(realpath ~/dotfiles/kitty/code_session.conf) -1'
+exec --no-startup-id code
+exec --no-startup-id thunderbird
+exec --no-startup-id remmina
+exec --no-startup-id microsoft-edge
+exec --no-startup-id wolai
+exec --no-startup-id i3-msg 'workspace $ws1; exec x-terminal-emulator'
+

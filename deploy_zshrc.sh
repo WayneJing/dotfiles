@@ -7,5 +7,5 @@ if [ "develop" = $machine_env ]; then
 else
     ln -s $(pwd)/.zshrc_debug_server ~/.zshrc
 fi
-
+ln -s $(pwd)/completion_keyword ~/completion_keyword
 source ~/.zshrc

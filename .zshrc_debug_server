@@ -131,7 +131,7 @@ _killtestvm() {
     elif [ 0 -eq `echo $1 | grep -cEi "[a-zA-Z]+"` ]; then
         for i in {1..$1};
         do
-            vm=$(echo $real_list | fzy -e "vats-test.*$(printf "%02d" $i)" | head -n 1 | awk -F" " '{print $2}')
+            vm=$(echo $real_list | grep -e "vats-test.*$(printf "%02d" $i)" | head -n 1 | awk -F" " '{print $2}')
             virsh destroy $vm
         done
     else
@@ -216,6 +216,7 @@ vmc(){
             else
                 virsh console --domain $vm --force
             fi
+            echo "============================%(date) $vm console disconnect============================="
             ;;
         launch)
             _launchtestvm $2
@@ -239,7 +240,6 @@ fix_corrupt_history(){
 }
 fix_corrupt_history
 export PATH=$PATH:/snap/bin:/usr/local/share
-source ~/.passwdrc
 stest(){
     realpath $1
     test_case_list=$($1 &)
