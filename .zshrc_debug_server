@@ -177,8 +177,7 @@ _show_vm_vf() {
         for i in {1..$1};
         do
             vm=$(echo $real_list | grep -e "vats-test.*$(printf "%02d" $i)" | head -n 1| awk -F" " '{print $2}')
-            xpath=$(virsh dumpxml --domain $vm | xmllint --xpath "//hostdev[@mode=\"subsystem\"]/source/address" - | awk -F'["x]')
-            pci_id=$(echo $xpath | awk -F'["x]' '{printf "%s:%s:%s.%s",$3,$6,$9,$12}')
+            pci_id=$(virsh dumpxml --domain $vm | xmllint --xpath "//hostdev[@mode=\"subsystem\"]/source/address" - | awk -F'["x]' '{printf "%s:%s:%s.%s\n",$3,$6,$9,$12}')
             if [ ! -n "$(lspci -s $pci_id)" ]; then
                 pf_pci_id=$(echo $pci_id | awk -F":" '{print $1:$2:00.0}')
                 echo $(printf "%-40s --->" $vm) $pci_id '--->' PF: $(lspci -s $pf_pci_id)
