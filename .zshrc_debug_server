@@ -119,11 +119,13 @@ z() {
 }
 
 __filter_vm() {
-    if [ "alive"="$1" ]; then
+    if [ -n "$1" ] && [ "alive"="$1" ]; then
         vm_list=$(virsh list)
     else
         vm_list=$(virsh list --all)
-        shift 1
+        if [ -n "$1" ]; then
+            shift 1
+        fi
     fi
     local lines=$(echo $vm_list | wc -l)
     local real_list=$(echo $vm_list | tail -n $(expr $lines - 2))
