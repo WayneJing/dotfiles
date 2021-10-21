@@ -121,22 +121,20 @@ z() {
 __filter_vm() {
     if [ -n "$1" ] && [ "alive" = "$1" ]; then
         vm_list=$(virsh list)
+        shift 1
     else
         vm_list=$(virsh list --all)
-        if [ -n "$1" ]; then
-            shift 1
-        fi
     fi
     local lines=$(echo $vm_list | wc -l)
     local real_list=$(echo $vm_list | tail -n $(expr $lines - 2))
-    if [ -z "$2"   ]; then
+    if [ -z "$1"   ]; then
 
         vm=$(echo $real_list | fzy | awk -F" " '{print $2}')
 
-    elif [ 0 -eq `echo $2 | grep -cEi "[a-zA-Z]+"` ]; then
-        vm=$(echo $real_list | grep -e "vats-test.*$(printf "%02d" $2)" | head -n 1 | awk -F" " '{print $2}')
+    elif [ 0 -eq `echo $1 | grep -cEi "[a-zA-Z]+"` ]; then
+        vm=$(echo $real_list | grep -e "vats-test.*$(printf "%02d" $1)" | head -n 1 | awk -F" " '{print $2}')
     else
-        vm=$(echo $real_list | fzy -q "$2" | awk -F" " '{print $2}')
+        vm=$(echo $real_list | fzy -q "$1" | awk -F" " '{print $2}')
     fi
 }
 _operatetestvm() {
