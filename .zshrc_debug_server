@@ -120,14 +120,14 @@ z() {
 
 __filter_vm() {
     vm=$1
-    if [ ! -n "$2" ]; then
-        local vm_list=$(virsh list)
+    if [ -n "$2" ]; then
+        vm_list=$(virsh list)
     else
-        local vm_list=$(virsh list --all)
+        vm_list=$(virsh list --all)
     fi
     local lines=$(echo $vm_list | wc -l)
     local real_list=$(echo $vm_list | tail -n $(expr $lines - 2))
-    if [ ! -n "$1"   ]; then
+    if [ -z "$1"   ]; then
 
         vm=$(echo $real_list | fzy | awk -F" " '{print $2}')
 
@@ -139,10 +139,7 @@ __filter_vm() {
 }
 _operatetestvm() {
 
-    if [ ! -n "$1"   ]; then
-        __filter_vm $1
-        virsh $2 $vm
-    elif [ 0 -eq `echo $1 | grep -cEi "[a-zA-Z]+"` ]; then
+    if [ -n "$1" ] && [ 0 -eq `echo $1 | grep -cEi "[a-zA-Z]+"` ]; then
         for i in {1..$1};
         do
             __filter_vm $i
@@ -158,7 +155,7 @@ _show_vm_vf() {
 
     __filter_vm $1
     pci_id=$(virsh dumpxml --domain $vm | xmllint --xpath "//hostdev[@mode=\"subsystem\"]/source/address" - | awk -F'["x]' '{printf "%s:%s:%s.%s\n",$3,$6,$9,$12}')
-    if [ ! -n "$(lspci -s $pci_id)" ]; then
+    if [ -z "$(lspci -s $pci_id)" ]; then
         pf_pci_id=$(echo $pci_id | awk -F":" '{printf "%s:%s:00.0\n",$1,$2}')
         echo $(printf "%-40s --->" $vm) $pci_id '--->' PF: $(lspci -s $pf_pci_id)
     else
@@ -227,7 +224,7 @@ vmc(){
             _operatetestvm $2 destroy
             ;;
         list-dev)
-            if [ 0 -eq `echo $2 | grep -cEi "[a-zA-Z]+"` ]; then
+            if [ -z "$2" ] && [ 0 -eq `echo $2 | grep -cEi "[a-zA-Z]+"` ]; then
                 for i in {1..$2};
                 do
                     _show_vm_vf $i
