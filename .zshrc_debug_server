@@ -139,15 +139,15 @@ __filter_vm() {
 }
 _operatetestvm() {
 
-    if [ -n "$1" ] && [ 0 -eq `echo $1 | grep -cEi "[a-zA-Z]+"` ]; then
+    if [ -n "$2" ] && [ 0 -eq `echo $2 | grep -cEi "[a-zA-Z]+"` ]; then
         for i in {1..$1};
         do
             __filter_vm $i
-            virsh $2 $vm
+            virsh $1 $vm
         done
     else
-        __filter_vm $1
-        virsh $2 $vm
+        __filter_vm $2
+        virsh $1 $vm
     fi
 }
 
@@ -218,10 +218,10 @@ vmc(){
             echo "============================%(date) $vm console disconnect============================="
             ;;
         launch)
-            _operatetestvm $2 start
+            _operatetestvm start $2
             ;;
         kill)
-            _operatetestvm $2 destroy
+            _operatetestvm destroy $2
             ;;
         list-dev)
             if [ -n "$2" ] && [ 0 -eq `echo $2 | grep -cEi "[a-zA-Z]+"` ]; then
