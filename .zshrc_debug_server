@@ -117,79 +117,46 @@ z() {
     _z "$@"
   fi
 }
-_killtestvm() {
 
+__filter_vm() {
     vm=$1
-    vm_list=$(virsh list --all)
-    lines=$(echo $vm_list | wc -l)
-    real_list=$(echo $vm_list | tail -n $(expr $lines - 2))
+    if [ ! -n "$2" ]; then
+        local vm_list=$(virsh list)
+    else
+        local vm_list=$(virsh list --all)
+    fi
+    local lines=$(echo $vm_list | wc -l)
+    local real_list=$(echo $vm_list | tail -n $(expr $lines - 2))
     if [ ! -n "$1"   ]; then
 
         vm=$(echo $real_list | fzy | awk -F" " '{print $2}')
 
-        virsh destroy $vm
     elif [ 0 -eq `echo $1 | grep -cEi "[a-zA-Z]+"` ]; then
-        for i in {1..$1};
-        do
-            vm=$(echo $real_list | grep -e "vats-test.*$(printf "%02d" $i)" | head -n 1 | awk -F" " '{print $2}')
-            virsh destroy $vm
-        done
+        vm=$(echo $real_list | grep -e "vats-test.*$(printf "%02d" $1)" | head -n 1 | awk -F" " '{print $2}')
     else
         vm=$(echo $real_list | fzy -q "$1" | awk -F" " '{print $2}')
-        virsh destroy $vm
     fi
 }
+_operatetestvm() {
 
-_launchtestvm(){
-
-    vm=$1
-    vm_list=$(virsh list --all)
-    lines=$(echo $vm_list | wc -l)
-    real_list=$(echo $vm_list | tail -n $(expr $lines - 2))
     if [ ! -n "$1"   ]; then
-
-        vm=$(echo $real_list | fzy | awk -F" " '{print $2}')
-
-        virsh start $vm
+        __filter_vm $1
+        virsh $2 $vm
     elif [ 0 -eq `echo $1 | grep -cEi "[a-zA-Z]+"` ]; then
         for i in {1..$1};
         do
-            vm=$(echo $real_list | grep -e "vats-test.*$(printf "%02d" $i)" | head -n 1| awk -F" " '{print $2}')
-            virsh start $vm
+            __filter_vm $i
+            virsh $2 $vm
         done
     else
-        vm=$(echo $real_list | fzy -q "$1" | awk -F" " '{print $2}')
-        virsh start $vm
+        __filter_vm $1
+        virsh $2 $vm
     fi
 }
 
 _show_vm_vf() {
 
-    vm=$1
-    vm_list=$(virsh list --all)
-    lines=$(echo $vm_list | wc -l)
-    real_list=$(echo $vm_list | tail -n $(expr $lines - 2))
-    if [ ! -n "$1"   ]; then
-
-        vm=$(echo $real_list | fzy | awk -F" " '{print $2}')
-
-    elif [ 0 -eq `echo $1 | grep -cEi "[a-zA-Z]+"` ]; then
-        for i in {1..$1};
-        do
-            vm=$(echo $real_list | grep -e "vats-test.*$(printf "%02d" $i)" | head -n 1| awk -F" " '{print $2}')
-            pci_id=$(virsh dumpxml --domain $vm | xmllint --xpath "//hostdev[@mode=\"subsystem\"]/source/address" - | awk -F'["x]' '{printf "%s:%s:%s.%s\n",$3,$6,$9,$12}')
-            if [ ! -n "$(lspci -s $pci_id)" ]; then
-                pf_pci_id=$(echo $pci_id | awk -F":" '{printf "%s:%s:00.0\n",$1,$2}')
-                echo $(printf "%-40s --->" $vm) $pci_id '--->' PF: $(lspci -s $pf_pci_id)
-            else
-                echo $(printf "%-40s --->" $vm) $(lspci -s $pci_id)
-            fi
-        done
-        return 0
-    else
-        vm=$(echo $real_list | fzy -q "$1" | awk -F" " '{print $2}')
-    fi
-
+    __filter_vm $1
     pci_id=$(virsh dumpxml --domain $vm | xmllint --xpath "//hostdev[@mode=\"subsystem\"]/source/address" - | awk -F'["x]' '{printf "%s:%s:%s.%s\n",$3,$6,$9,$12}')
     if [ ! -n "$(lspci -s $pci_id)" ]; then
         pf_pci_id=$(echo $pci_id | awk -F":" '{printf "%s:%s:00.0\n",$1,$2}')
@@ -201,29 +168,8 @@ _show_vm_vf() {
 
 _change_attach_dev() {
     
-    vm=$1
-    vm_list=$(virsh list --all)
-    lines=$(echo $vm_list | wc -l)
-    real_list=$(echo $vm_list | tail -n $(expr $lines - 2))
-    if [ ! -n "$1"   ]; then
-
-        vm=$(echo $real_list | fzy | awk -F" " '{print $2}')
-    else
-        vm=$(echo $real_list | fzy -q "$1" | awk -F" " '{print $2}')
-    fi
-
     echo Display Current attached Device:
-    pci_id=$(virsh dumpxml --domain $vm |tee /tmp/vmxml.xml | xmllint --xpath "//hostdev[@mode=\"subsystem\"]/source/address" - | awk -F'["x]' '{printf "%s:%s:%s.%s\n",$3,$6,$9,$12}')
-    if [ -e "$pci_id" ]; then
-        echo No device Attached
-        return -1
-    fi
-    if [ ! -n "$(lspci -s $pci_id)" ]; then
-        pf_pci_id=$(echo $pci_id | awk -F":" '{printf "%s:%s:00.0\n",$1,$2}')
-        echo $(printf "%-40s --->" $vm) $pci_id '--->' PF: $(lspci -s $pf_pci_id)
-    else
-        echo $(printf "%-40s --->" $vm) $(lspci -s $pci_id)
-    fi
+    _show_vm_vf $1
     update_pci_id=$(lspci -D | grep ATI | grep Display | fzy )
     local format_pci=$(echo $update_pci_id|awk -F'[ .:]' '{printf "0x%s,0x%s,0x%s,0x%s",$1,$2,$3,$4}')
     echo update from $pci_id to $update_pci_id
@@ -233,25 +179,10 @@ _change_attach_dev() {
     xmlstarlet edit -L -u "//hostdev[@mode=\"subsystem\"]/source/address/@function" -v $(echo $format_pci | awk -F"," '{print $4}') /tmp/vmxml.xml 
     virsh define --file /tmp/vmxml.xml
     rm /tmp/vmxml.xml
-
 }
 _get_vm_ip(){
 
-    vm=$1
-    local vm_list=$(virsh list )
-    local lines=$(echo $vm_list | wc -l)
-    local real_list=$(echo $vm_list | tail -n $(expr $lines - 2))
-    if [ ! -n "$1" ];then
-        vm=$(echo $real_list | fzy | awk -F" " '{print $2}')
-
-    elif [ 0 -eq `echo $1 | grep -cEi "[a-zA-Z]+"`  ]; then
-
-
-        vm=$(echo $real_list | grep -e "vats-test.*$(printf "%02d" $1)"|head -n 1 | awk -F" " '{print $2}')
-        # ip=$(arp -a | grep -o ".*$mac" | head -n 1 | grep -o "(.*)" | grep -o "[^()]*")
-    else
-        vm=$(echo $real_list | fzy -q "$1" | awk -F" " '{print $2}')
-    fi
+    __filter_vm $1 alive
     if [ ! -n "$vm" ]; then
         echo error match empty vm name
         return -1
@@ -260,7 +191,6 @@ _get_vm_ip(){
     while [ ! -n "$mac" ]
     do
         sleep 1
-
         mac=$(virsh dumpxml --domain $vm | grep -io "mac address='.*'" | awk -F"'" '{print $2}' )
     done
     ip=""
@@ -291,13 +221,20 @@ vmc(){
             echo "============================%(date) $vm console disconnect============================="
             ;;
         launch)
-            _launchtestvm $2
+            _operatetestvm $2 start
             ;;
         kill)
-            _killtestvm $2
+            _operatetestvm $2 destroy
             ;;
         list-dev)
-            _show_vm_vf $2
+            if [ 0 -eq `echo $2 | grep -cEi "[a-zA-Z]+"` ]; then
+                for i in {1..$2};
+                do
+                    _show_vm_vf $i
+                done
+            else
+                _show_vm_vf $2
+            fi
             ;;
         change-dev)
             _change_attach_dev $2
