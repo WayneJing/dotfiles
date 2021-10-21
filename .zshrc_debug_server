@@ -119,22 +119,22 @@ z() {
 }
 
 __filter_vm() {
-    vm=$1
-    if [ -n "$2" ]; then
+    if [ "alive"="$1" ]; then
         vm_list=$(virsh list)
     else
         vm_list=$(virsh list --all)
+        shift 1
     fi
     local lines=$(echo $vm_list | wc -l)
     local real_list=$(echo $vm_list | tail -n $(expr $lines - 2))
-    if [ -z "$1"   ]; then
+    if [ -z "$2"   ]; then
 
         vm=$(echo $real_list | fzy | awk -F" " '{print $2}')
 
-    elif [ 0 -eq `echo $1 | grep -cEi "[a-zA-Z]+"` ]; then
-        vm=$(echo $real_list | grep -e "vats-test.*$(printf "%02d" $1)" | head -n 1 | awk -F" " '{print $2}')
+    elif [ 0 -eq `echo $2 | grep -cEi "[a-zA-Z]+"` ]; then
+        vm=$(echo $real_list | grep -e "vats-test.*$(printf "%02d" $2)" | head -n 1 | awk -F" " '{print $2}')
     else
-        vm=$(echo $real_list | fzy -q "$1" | awk -F" " '{print $2}')
+        vm=$(echo $real_list | fzy -q "$2" | awk -F" " '{print $2}')
     fi
 }
 _operatetestvm() {
@@ -179,7 +179,7 @@ _change_attach_dev() {
 }
 _get_vm_ip(){
 
-    __filter_vm $1 alive
+    __filter_vm alive $1
     if [ ! -n "$vm" ]; then
         echo error match empty vm name
         return -1
