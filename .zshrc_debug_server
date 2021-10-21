@@ -119,7 +119,7 @@ z() {
 }
 
 __filter_vm() {
-    if [ -n "$1" ] && [ "alive"="$1" ]; then
+    if [ -n "$1" ] && [ "alive" = "$1" ]; then
         vm_list=$(virsh list)
     else
         vm_list=$(virsh list --all)
