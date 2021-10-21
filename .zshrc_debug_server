@@ -224,7 +224,7 @@ vmc(){
             _operatetestvm $2 destroy
             ;;
         list-dev)
-            if [ -z "$2" ] && [ 0 -eq `echo $2 | grep -cEi "[a-zA-Z]+"` ]; then
+            if [ -n "$2" ] && [ 0 -eq `echo $2 | grep -cEi "[a-zA-Z]+"` ]; then
                 for i in {1..$2};
                 do
                     _show_vm_vf $i
