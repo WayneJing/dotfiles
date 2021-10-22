@@ -154,7 +154,11 @@ _operatetestvm() {
 _show_vm_vf() {
 
     __filter_vm $1
-    pci_id=$(virsh dumpxml --domain $vm | xmllint --xpath "//hostdev[@mode=\"subsystem\"]/source/address" - | awk -F'["x]' '{printf "%s:%s:%s.%s\n",$3,$6,$9,$12}')
+    if [ ! -n "$vm" ]; then
+        echo error match empty vm name
+        return -1
+    fi
+    pci_id=$(virsh dumpxml --domain $vm |tee /tmp/vmxml.xml| xmllint --xpath "//hostdev[@mode=\"subsystem\"]/source/address" - | awk -F'["x]' '{printf "%s:%s:%s.%s\n",$3,$6,$9,$12}')
     if [ -z "$(lspci -s $pci_id)" ]; then
         pf_pci_id=$(echo $pci_id | awk -F":" '{printf "%s:%s:00.0\n",$1,$2}')
         echo $(printf "%-40s --->" $vm) $pci_id '--->' PF: $(lspci -s $pf_pci_id)
@@ -167,6 +171,10 @@ _change_attach_dev() {
     
     echo Display Current attached Device:
     _show_vm_vf $1
+    if [ ! -n "$vm" ]; then
+        echo error match empty vm name
+        return -1
+    fi
     update_pci_id=$(lspci -D | grep ATI | grep Display | fzy )
     local format_pci=$(echo $update_pci_id|awk -F'[ .:]' '{printf "0x%s,0x%s,0x%s,0x%s",$1,$2,$3,$4}')
     echo update from $pci_id to $update_pci_id
