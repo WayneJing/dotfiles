@@ -1,3 +1,3 @@
 [submodule "vmc"]
 	path = vmc
-	url = git@github.com:WayneJing/vmc.git
+	url = https://github.com/WayneJing/vmc.git
