@@ -381,7 +381,7 @@ get_latest_rc() {
     old_commit=$(git log --oneline | head -n 1 | awk -F " " '{print $1}')
     git clean -f -d -x
     git pull
-    git submodule update -f --remote
+    git submodule foreach git pull origin main
     new_commit=$(git log --oneline | head -n 1 | awk -F " " '{print $1}')
     if [ "$old_commit" != "$new_commit" ]; then
         omz reload
