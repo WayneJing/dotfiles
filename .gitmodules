@@ -1,4 +1,4 @@
 [submodule "vmc"]
 	path = vmc
-	url = https://github.com/WayneJing/vmc.git
+	url = git@github.com:WayneJing/vmc.git
 	branch = main

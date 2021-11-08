@@ -118,39 +118,6 @@ z() {
   fi
 }
 
-__filter_vm() {
-    if [ -n "$1" ] && [ "alive" = "$1" ]; then
-        vm_list=$(virsh list)
-        shift 1
-    else
-        vm_list=$(virsh list --all)
-    fi
-    local lines=$(echo $vm_list | wc -l)
-    local real_list=$(echo $vm_list | tail -n $(expr $lines - 2))
-    if [ -z "$1"   ]; then
-
-        vm=$(echo $real_list | fzy | awk -F" " '{print $2}')
-
-    elif [ 0 -eq `echo $1 | grep -cEi "[a-zA-Z]+"` ]; then
-        vm=$(echo $real_list | grep -e "vats-test.*-$(printf "%02d" $1)" | head -n 1 | awk -F" " '{print $2}')
-    else
-        vm=$(echo $real_list | fzy -q "$1" | awk -F" " '{print $2}')
-    fi
-}
-_operatetestvm() {
-
-    if [ -n "$2" ] && [ 0 -eq `echo $2 | grep -cEi "[a-zA-Z]+"` ]; then
-        for i in {1..$2};
-        do
-            __filter_vm $i
-            virsh $1 $vm
-        done
-    else
-        __filter_vm $2
-        virsh $1 $vm
-    fi
-}
-
 _show_vm_vf() {
 
     __filter_vm $1
@@ -168,7 +135,7 @@ _show_vm_vf() {
 }
 
 _change_attach_dev() {
-    
+
     echo Display Current attached Device:
     _show_vm_vf $1
     if [ ! -n "$vm" ]; then
@@ -178,79 +145,13 @@ _change_attach_dev() {
     update_pci_id=$(lspci -D | grep ATI | grep Display | fzy )
     local format_pci=$(echo $update_pci_id|awk -F'[ .:]' '{printf "0x%s,0x%s,0x%s,0x%s",$1,$2,$3,$4}')
     echo update from $pci_id to $update_pci_id
-    xmlstarlet edit -L -u "//hostdev[@mode=\"subsystem\"]/source/address/@domain" -v $(echo $format_pci | awk -F"," '{print $1}') /tmp/vmxml.xml 
-    xmlstarlet edit -L -u "//hostdev[@mode=\"subsystem\"]/source/address/@bus" -v $(echo $format_pci | awk -F"," '{print $2}') /tmp/vmxml.xml 
-    xmlstarlet edit -L -u "//hostdev[@mode=\"subsystem\"]/source/address/@slot" -v $(echo $format_pci | awk -F"," '{print $3}') /tmp/vmxml.xml 
-    xmlstarlet edit -L -u "//hostdev[@mode=\"subsystem\"]/source/address/@function" -v $(echo $format_pci | awk -F"," '{print $4}') /tmp/vmxml.xml 
+    xmlstarlet edit -L -u "//hostdev[@mode=\"subsystem\"]/source/address/@domain" -v $(echo $format_pci | awk -F"," '{print $1}') /tmp/vmxml.xml
+    xmlstarlet edit -L -u "//hostdev[@mode=\"subsystem\"]/source/address/@bus" -v $(echo $format_pci | awk -F"," '{print $2}') /tmp/vmxml.xml
+    xmlstarlet edit -L -u "//hostdev[@mode=\"subsystem\"]/source/address/@slot" -v $(echo $format_pci | awk -F"," '{print $3}') /tmp/vmxml.xml
+    xmlstarlet edit -L -u "//hostdev[@mode=\"subsystem\"]/source/address/@function" -v $(echo $format_pci | awk -F"," '{print $4}') /tmp/vmxml.xml
     virsh define --file /tmp/vmxml.xml
     rm /tmp/vmxml.xml
 }
-_get_vm_ip(){
-
-    __filter_vm alive $1
-    if [ ! -n "$vm" ]; then
-        echo error match empty vm name
-        return -1
-    fi
-    local mac=""
-    while [ ! -n "$mac" ]
-    do
-        sleep 1
-        mac=$(virsh dumpxml --domain $vm | grep -io "mac address='.*'" | awk -F"'" '{print $2}' )
-    done
-    ip=""
-    while [ ! -n "$ip" ]
-    do
-        sleep 1
-        ip=$(arp -a | grep -o ".*$mac" | grep -o "(.*)" | grep -o "[^()]*")
-    done
-    until nc -vzw 2 $ip 22; do sleep 2; done
-    echo vm ip:$ip
-    return 0
-}
-
-vmc(){
-    case $1 in
-        connect)
-            _get_vm_ip $2
-            ssh-keygen -f "/root/.ssh/known_hosts" -R "$ip"
-            sshpass -p amd1234 ssh -o StrictHostKeyChecking=no root@$ip $3
-            ;;
-        console)
-            _get_vm_ip $2
-            if [ ! -n "$ip" ]; then
-                echo invalid param
-            else
-                virsh console --domain $vm --force
-            fi
-            echo "============================%(date) $vm console disconnect============================="
-            ;;
-        launch)
-            _operatetestvm start $2
-            ;;
-        kill)
-            _operatetestvm destroy $2
-            ;;
-        list-dev)
-            if [ -n "$2" ] && [ 0 -eq `echo $2 | grep -cEi "[a-zA-Z]+"` ]; then
-                for i in {1..$2};
-                do
-                    _show_vm_vf $i
-                done
-            else
-                _show_vm_vf $2
-            fi
-            ;;
-        change-dev)
-            _change_attach_dev $2
-            ;;
-        *)
-            echo "Undefined command!"
-            ;;
-    esac
-}
-
-
 fix_corrupt_history(){
     mv ~/.zsh_history ~/.zsh_history_bad
 
@@ -352,7 +253,7 @@ pci_link(){
         bus_id=$(lspci | grep ATI | grep Display | fzy | awk -F' ' '{print $1}')
         echo 1 > /sys/bus/pci/devices/0000:$bus_id/remove
     else
-        echo 1 > /sys/bus/pci/devices/0000:00:01.0/rescan
+        echo 1 > /sys/bus/pci/rescan
     fi
     lspci | grep ATI
 }
@@ -381,7 +282,7 @@ get_latest_rc() {
     old_commit=$(git log --oneline | head -n 1 | awk -F " " '{print $1}')
     git clean -f -d -x
     git pull
-    git submodule foreach git pull origin main
+    git submodule foreach git pull origin jingwen
     new_commit=$(git log --oneline | head -n 1 | awk -F " " '{print $1}')
     if [ "$old_commit" != "$new_commit" ]; then
         omz reload
@@ -394,4 +295,10 @@ bindkey "\e[7~" beginning-of-line
 bindkey "\eOH" beginning-of-line
 bindkey "\eOF" end-of-line
 
-source ~/completion_keyword
+autoload -U +X compinit && compinit
+autoload -U +X bashcompinit && bashcompinit
+completion_keyword=$(ls /etc/bash_completion.d/*)
+while read -r key;
+do
+    source $key
+done <<< $completion_keyword
