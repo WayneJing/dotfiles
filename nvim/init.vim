@@ -26,7 +26,7 @@ map +y "+y
 " 从系统剪切板粘贴
 map +p "+p
 set virtualedit=block,onemore   " 允许光标出现在最后一个字符的后面
-set listchars=tab:→\ ,trail:·,precedes:«,extends:»,eol:¶
+set listchars=tab:→\ ,trail:·,precedes:«,extends:»
 set list
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " 代码缩进和排版
@@ -111,12 +111,11 @@ Plug 'liuchengxu/vista.vim'
 "Plug 'kristijanhusak/defx-git'
 "Plug 'majutsushi/tagbar'
 "Plug 'craigemery/vim-autotag'
-Plug 'psf/black'
 Plug 'octol/vim-cpp-enhanced-highlight'
 Plug 'mtdl9/vim-log-highlighting'
 "Plug 'kh3phr3n/python-syntax'
 Plug 'sheerun/vim-polyglot'
-Plug 'liuchengxu/vim-clap', { 'do': function('clap#installer#build_all')}
+Plug 'liuchengxu/vim-clap', { 'do': { -> clap#installer#force_download() } }
 "Plug 'kdheepak/lazygit.vim', { 'branch': 'nvim-v0.4.3' }
 Plug 'tpope/vim-fugitive'
 Plug 'junegunn/gv.vim'
@@ -301,7 +300,7 @@ let g:sonokai_style = 'atlantis'
 
 """vista vim config
 let g:vista_icon_indent = ["╰─▸ ", "├─▸ "]
-let g:vista_default_executive = 'ctags'
+let g:vista_default_executive = 'coc'
 let g:vista#renderer#enable_icon = 1
 let g:vista_sidebar_width = 45
 map <silent> <F4> :Vista!!<CR>

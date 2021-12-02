@@ -146,7 +146,7 @@ assign [class="Google-chrome"] $ws2
 assign [class="Microsoft-edge.*"] $ws2
 assign [class=".*remmina.*"] $ws5
 assign [class="Thunderbird"] $ws6
-assign [class="wolai"] $ws8
+assign [class="Logseq"] $ws8
 
 for_window[class=^.*] border pixel 0
 for_window[class="copyq"] floating enable
@@ -277,7 +277,6 @@ mode "$mode_gaps_outer" {
 # set power-manager and volume control
 exec --no-startup-id mate-power-manager
 exec_always --no-startup-id exec $HOME/.config/picom/start.sh
-exec_always --no-startup-id exec fetchmail
 exec_always --no-startup-id exec copyq
 
 bindsym XF86AudioRaiseVolume exec --no-startup-id amixer -c 0 -q set Master 2dB+ unmute
@@ -295,6 +294,6 @@ exec --no-startup-id code
 exec --no-startup-id thunderbird
 exec --no-startup-id remmina
 exec --no-startup-id microsoft-edge
-exec --no-startup-id wolai
+exec --no-startup-id logseq
 exec --no-startup-id i3-msg 'workspace $ws1; exec x-terminal-emulator'
 
