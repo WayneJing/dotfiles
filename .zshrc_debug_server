@@ -255,7 +255,6 @@ get_latest_rc() {
     fi
     cd $original_path
 }
-get_latest_rc
 bindkey "\e[8~" end-of-line
 bindkey "\e[7~" beginning-of-line
 bindkey "\eOH" beginning-of-line
