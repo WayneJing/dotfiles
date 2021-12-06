@@ -224,23 +224,6 @@ pci_link(){
     lspci | grep ATI
 }
 
-sync_file(){
-    if [ ! -n "$3" ]; then
-        rsync -Pa -e 'sshpass -p root ssh -l root' "$1" "$2"
-    else
-        rsync -Pa -e "sshpass -p $3 ssh -l root" "$1" "$2"
-    fi
-}
-
-sync_file_to_vm(){
-    _get_vm_ip
-    sync_file $1 $ip:$2 'amd1234'
-}
-
-sync_file_from_vm(){
-    _get_vm_ip
-    sync_file $ip:$1 $2 'amd1234'
-}
 export DOTFILE_PATH="$HOME/dotfiles"
 get_latest_rc() {
     original_path=$(pwd)
@@ -255,6 +238,11 @@ get_latest_rc() {
     fi
     cd $original_path
 }
+
+update-vats(){    
+    sshpass -p root ssh -o StrictHostKeyChecking=no root@10.67.245.255 "cd /share/vats2;git pull"                                                                                                                                                             
+    rsync -Pa /mnt/share/vats2/vats /home/drop/common_drop/    
+} 
 bindkey "\e[8~" end-of-line
 bindkey "\e[7~" beginning-of-line
 bindkey "\eOH" beginning-of-line
