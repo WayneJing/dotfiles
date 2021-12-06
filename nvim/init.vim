@@ -99,36 +99,23 @@ Plug 'jiangmiao/auto-pairs'
 Plug 'scrooloose/nerdcommenter'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'terryma/vim-multiple-cursors'
-"Plug 'scrooloose/nerdtree'
 Plug 'mileszs/ack.vim'
 Plug 'morhetz/gruvbox'
 Plug 'Yggdroot/indentLine'
 Plug 'luochen1990/rainbow'
-"Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'liuchengxu/vista.vim'
-"Plug 'Shougo/defx.nvim', { 'do': ':UpdateRemotePlugins' }
-"Plug 'kristijanhusak/defx-icons'
-"Plug 'kristijanhusak/defx-git'
-"Plug 'majutsushi/tagbar'
-"Plug 'craigemery/vim-autotag'
+Plug 'craigemery/vim-autotag'
 Plug 'octol/vim-cpp-enhanced-highlight'
 Plug 'mtdl9/vim-log-highlighting'
-"Plug 'kh3phr3n/python-syntax'
 Plug 'sheerun/vim-polyglot'
 Plug 'liuchengxu/vim-clap', { 'do': { -> clap#installer#force_download() } }
-"Plug 'kdheepak/lazygit.vim', { 'branch': 'nvim-v0.4.3' }
 Plug 'tpope/vim-fugitive'
 Plug 'junegunn/gv.vim'
 Plug 'terryma/vim-smooth-scroll'
-"Plug 'easymotion/vim-easymotion'
 Plug 'vn-ki/coc-clap'
 call plug#end()
 
 """PlugConfig
-"""lazygit
-let g:lazygit_floating_window_scaling_factor = 0.8
-map <silent> <F3> :LazyGit<CR>
-imap <silent> <F3> <ESC>:LazyGit<CR>
 
 " Vim Cpp Highlight
 let g:cpp_class_scope_highlight=1
@@ -143,13 +130,6 @@ let g:autotagTagsFile="tags"
 let g:clap_theme = 'material_design_dark'
 "let g:clap_open_preview = 'on_move'
 nmap <silent><F12> :Clap<CR>
-
-
-"""tagbar
-"let g:tagbar_width=40
-"nnoremap <silent> <F4> :TagbarToggle<CR>
-"autocmd BufReadPost *.cpp,*.c,*.h,*.hpp,*.cc,*.cxx,*.py,*.sh call tagbar#autoopen()
-"let g:tagbar_autoshowtag = 1
 
 """rainbow
 let g:rainbow_active = 1
@@ -308,12 +288,11 @@ imap <silent> <F4> <ESC>:Vista!!<CR>
 noremap <C-f> :Clap tags <CR>
 let g:vista_fzf_preview = ['right:50%']
 
-"autocmd BufReadPost *.cpp,*.c,*.h,*.hpp,*.cc,*.cxx,*.py,*.sh,*.xml call vista#sidebar#Open()
+autocmd BufReadPost *.cpp,*.c,*.h,*.hpp,*.cc,*.cxx,*.py,*.sh,*.xml call vista#sidebar#Open()
 
 
 
-"""FZF Config
-set rtp+=~/.fzf
+"""clap Config
 " find file
 noremap \ :Clap files .<CR>
 " find history
@@ -330,119 +309,8 @@ let g:clap_provider_grep_delay=10
 let g:clap_open_preview='always'
 let g:clap_preview_size=10
 let g:clap_preview_direction="LR"
-autocmd! FileType fzf
-autocmd  FileType fzf set laststatus=0 noruler
-            \| autocmd BufLeave <buffer> set laststatus=2 ruler
-
-command! -bang -nargs=* Buffers
-            \ call fzf#vim#buffers(
-            \   '',
-            \   <bang>0 ? fzf#vim#with_preview('up:60%')
-            \           : fzf#vim#with_preview('right:50%', '?'),
-            \   <bang>0)
-
-command! -bang -nargs=* LinesWithPreview
-            \ call fzf#vim#grep(
-            \   'rg --with-filename --column --line-number --no-heading --color=always --smart-case . '.fnameescape(expand('%')), 1,
-            \   fzf#vim#with_preview({'options': '--delimiter : --nth 4.. --sort'},  'up:70%', '?'),
-            \   1)
-command! -bang -nargs=* Rg
-            \ call fzf#vim#ag(<q-args>,
-            \                 <bang>0 ? fzf#vim#with_preview('up:60%')
-            \                         : fzf#vim#with_preview('right:50%', '?'),
-            \                 <bang>0)
 let g:ackprg = 'rg --vimgrep --smart-case --glob !tags -e '
 nnoremap <silent> <Leader>A :Ack! <C-R>=expand("<cword>")<CR><CR>
-command! -bang -nargs=* MRU call fzf#vim#history(fzf#vim#with_preview())
-
-"""defx config
-"call defx#custom#option('_', {
-            "\ 'winwidth': 30,
-            "\ 'split': 'vertical',
-            "\ 'direction': 'topleft',
-            "\ 'show_ignored_files': 0,
-            "\ 'columns': 'indent:git:icons:filename:type',
-            "\ 'buffer_name': '',
-            "\ 'toggle': 1,
-            "\ 'resume': 1
-            "\ })
-
-"nmap <silent> <Leader>e :Defx <cr>
-"autocmd FileType defx call s:defx_mappings()
-
-"function! s:defx_mappings() abort
-"nnoremap <silent><buffer><expr> l     <SID>defx_toggle_tree()                    " 打开或者关闭文件夹，文件
-"nnoremap <silent><buffer><expr> .     defx#do_action('toggle_ignored_files')     " 显示隐藏文件
-"nnoremap <silent><buffer><expr> <C-r>  defx#do_action('redraw')
-"endfunction
-
-"function! s:defx_toggle_tree() abort
-"" Open current file, or toggle directory expand/collapse
-"if defx#is_directory()
-"return defx#do_action('open_or_close_tree')
-"endif
-"return defx#do_action('multi', ['drop'])
-"endfunction
-"autocmd BufWritePost * call defx#redraw()
-"function! s:open_defx_if_directory()
-"" This throws an error if the buffer name contains unusual characters like
-"" [[buffergator]]. Desired behavior in those scenarios is to consider the
-"" buffer not to be a directory.
-"try
-"let l:full_path = expand(expand('%:p'))
-"catch
-"return
-"endtry
-"if isdirectory(l:full_path)
-"execute "Defx `expand('%:p')` | bd " . expand('%:r')
-"endif
-"" If the path is a directory, delete the (useless) buffer and open defx for
-"" that directory instead.
-"endfunction
-
-"autocmd FileType defx call s:defx_my_settings()
-"function! s:defx_my_settings() abort
-"" Define mappings
-"nnoremap <silent><buffer><expr> <CR> defx#do_action('drop')
-"nnoremap <silent><buffer><expr> c defx#do_action('copy')
-"nnoremap <silent><buffer><expr> m defx#do_action('move')
-"nnoremap <silent><buffer><expr> p defx#do_action('paste')
-"nnoremap <silent><buffer><expr> l defx#do_action('open')
-"nnoremap <silent><buffer><expr> E defx#do_action('open', 'vsplit')
-"nnoremap <silent><buffer><expr> P defx#do_action('open', 'pedit')
-"nnoremap <silent><buffer><expr> o defx#do_action('open_or_close_tree')
-"nnoremap <silent><buffer><expr> K defx#do_action('new_directory')
-"nnoremap <silent><buffer><expr> N defx#do_action('new_file')
-"nnoremap <silent><buffer><expr> M defx#do_action('new_multiple_files')
-"nnoremap <silent><buffer><expr> C defx#do_action('toggle_columns', 'mark:indent:icon:filename:type:size:time')
-"nnoremap <silent><buffer><expr> S defx#do_action('toggle_sort', 'time')
-"nnoremap <silent><buffer><expr> d defx#do_action('remove')
-"nnoremap <silent><buffer><expr> r defx#do_action('rename')
-"nnoremap <silent><buffer><expr> ! defx#do_action('execute_command')
-"nnoremap <silent><buffer><expr> x defx#do_action('execute_system')
-"nnoremap <silent><buffer><expr> yy defx#do_action('yank_path')
-"nnoremap <silent><buffer><expr> . defx#do_action('toggle_ignored_files')
-"nnoremap <silent><buffer><expr> ; defx#do_action('repeat')
-"nnoremap <silent><buffer><expr> h defx#do_action('cd', ['..'])
-"nnoremap <silent><buffer><expr> ~ defx#do_action('cd')
-"nnoremap <silent><buffer><expr> q defx#do_action('quit')
-"nnoremap <silent><buffer><expr> <Space> defx#do_action('toggle_select') . 'j'
-"nnoremap <silent><buffer><expr> * defx#do_action('toggle_select_all')
-"nnoremap <silent><buffer><expr> j line('.') == line('$') ? 'gg' : 'j'
-"nnoremap <silent><buffer><expr> k line('.') == 1 ? 'G' : 'k'
-"nnoremap <silent><buffer><expr> <C-l> defx#do_action('redraw')
-"nnoremap <silent><buffer><expr> <C-g> defx#do_action('print')
-"nnoremap <silent><buffer><expr> cd defx#do_action('change_vim_cwd')
-"endfunction
-
-"augroup defx_config
-"autocmd!
-"autocmd FileType defx call s:defx_my_settings()
-
-"" It seems like BufReadPost should work for this, but for some reason, I can't
-"" get it to fire. BufEnter seems to be more reliable.
-"autocmd BufEnter * call s:open_defx_if_directory()
-"augroup END
 
 
 highlight  Normal guibg=NONE ctermbg=none
@@ -456,26 +324,7 @@ nnoremap <F5> :let _s=@/<Bar>:%s/\s\+$//e<Bar>:let @/=_s<Bar><CR>
 noremap <silent> <c-u> :call smooth_scroll#up(&scroll, 0, 2)<CR>
 noremap <silent> <c-d> :call smooth_scroll#down(&scroll, 0, 2)<CR> 
 
-"easymotion
-"map  / <Plug>(easymotion-sn)
-"omap / <Plug>(easymotion-tn)
-
 autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | execute "normal! g'\"" | endif
-" These `n` & `N` mappings are options. You do not have to map `n` & `N` to EasyMotion.
-" Without these mappings, `n` & `N` works fine. (These mappings just provide
-" different highlight method and have some other features )
-"map  n <Plug>(easymotion-next)
-"map  N <Plug>(easymotion-prev)
-"
-"ACK
-"nnoremap <leader>F :Ack!<space>
-"if executable('rg')
-"    let g:ackprg = 'rg --vimgrep'
-"endif
-"""nerdtree config
-"nnoremap <silent> <Leader>N :NERDTreeToggle<CR>
-"nmap <leader>nf :NERDTreeFind
-"let NERDTreeStatusline="%{exists('b:NERDTree')?fnamemodify(b:NERDTree.root.path.str(), ':~'):''}"
 if filereadable(".vimrc")
     source .vimrc
 endif
