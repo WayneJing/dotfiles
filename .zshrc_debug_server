@@ -243,7 +243,7 @@ get_latest_rc() {
 update_dkms()
 {
     dkms_version=$(dpkg -l |grep amdgpu-dkms -m 1 |  awk -F":" '{print $2}' | awk -F" " '{print $1}')
-    dkms remove -m amdgpu/$dkms_version --all; dkms install -m amdgpu/$dkms_version -k `uname -r`
+    dkms remove  amdgpu/$dkms_version --all; dkms install  amdgpu/$dkms_version -k `uname -r`
 }
 update-vats(){    
     sshpass -p root ssh -o StrictHostKeyChecking=no root@10.67.245.255 "cd /share/vats2;git pull"                                                                                                                                                             
