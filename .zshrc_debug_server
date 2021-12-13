@@ -242,7 +242,7 @@ get_latest_rc() {
 
 update_dkms()
 {
-    dkms_version=$(dpkg -l |grep amdgpu-dkms -m 1 |  awk -F":" '{print $2}' | awk -F" " '{print $1}')
+    dkms_version=$(dpkg -L amdgpu-dkms | grep -E "src.*amdgpu" | head -1 | awk -F"-" '{print $2"-"$3}')
     dkms remove  amdgpu/$dkms_version --all; dkms install  amdgpu/$dkms_version -k `uname -r`
 }
 update-vats(){    
