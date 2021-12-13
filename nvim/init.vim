@@ -283,12 +283,12 @@ let g:vista_icon_indent = ["╰─▸ ", "├─▸ "]
 let g:vista_default_executive = 'coc'
 let g:vista#renderer#enable_icon = 1
 let g:vista_sidebar_width = 45
-map <silent> <F4> :call Vista_sidebar_toggle()<CR>
+map <silent> <F4> :Vista!!<CR>
 imap <silent> <F4> <ESC>:Vista!!<CR>
 noremap <C-f> :Clap tags <CR>
 let g:vista_fzf_preview = ['right:50%']
 
-autocmd BufReadPost *.cpp,*.c,*.h,*.hpp,*.cc,*.cxx,*.py,*.sh,*.xml call Vista_sidebar_toggle()
+"autocmd BufReadPost *.cpp,*.c,*.h,*.hpp,*.cc,*.cxx,*.py,*.sh,*.xml call Vista_sidebar_toggle()
 function Vista_sidebar_toggle()
     call vista#sidebar#ToggleFocus()
     call vista#sidebar#ToggleFocus()
