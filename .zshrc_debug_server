@@ -245,6 +245,18 @@ update_dkms()
     dkms_version=$(dpkg -L amdgpu-dkms | grep -E "src.*amdgpu" | head -1 | awk -F"-" '{print $2"-"$3}')
     dkms remove  amdgpu/$dkms_version --all; dkms install  amdgpu/$dkms_version -k `uname -r`
 }
+
+install_osbd()
+{
+    amdgpu-install --uninstall -y
+    amdgpu-repo --clean
+    OSDB_VERSION="$1"
+    ROCM_VERSION="$2"
+
+    amdgpu-repo --amdgpu-build "$OSDB_VERSION" --rocm-build "$ROCM_VERSION"
+    amdgpu-install --usecase=workstation --opencl=rocr -y
+}
+
 update-vats(){    
     sshpass -p root ssh -o StrictHostKeyChecking=no root@10.67.245.255 "cd /share/vats2;git pull"                                                                                                                                                             
     rsync -Pa /mnt/share/vats2/vats /home/drop/common_drop/    
