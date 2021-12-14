@@ -253,14 +253,14 @@ install_osbd()
     OSDB_VERSION="$1"
     ROCM_VERSION="$2"
 
-    amdgpu-repo --amdgpu-build "$OSDB_VERSION" --rocm-build "$ROCM_VERSION"
+    amdgpu-repo --amdgpu-build="$OSDB_VERSION" --rocm-build="$ROCM_VERSION"
     amdgpu-install --usecase=workstation --opencl=rocr -y
 }
 
-update-vats(){    
-    sshpass -p root ssh -o StrictHostKeyChecking=no root@10.67.245.255 "cd /share/vats2;git pull"                                                                                                                                                             
-    rsync -Pa /mnt/share/vats2/vats /home/drop/common_drop/    
-} 
+update-vats(){
+    sshpass -p root ssh -o StrictHostKeyChecking=no root@10.67.245.255 "cd /share/vats2;git pull"
+    rsync -Pa /mnt/share/vats2/vats /home/drop/common_drop/
+}
 bindkey "\e[8~" end-of-line
 bindkey "\e[7~" beginning-of-line
 bindkey "\eOH" beginning-of-line
