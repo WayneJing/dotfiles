@@ -255,7 +255,7 @@ install_osbd()
 
     amdgpu-repo --amdgpu-build="$OSDB_VERSION" --rocm-build="$ROCM_VERSION"
     amdgpu-install --usecase=workstation --opencl=rocr -y
-    apt remove mesa-vulkan-drivers
+    apt remove mesa-vulkan-drivers -y
 
 }
 
