@@ -85,9 +85,7 @@ set guifont=FiraCode\ Nerd\ Font:h12
 call plug#begin('~/.local/share/nvim/plugged')
 Plug 'mhinz/vim-startify'
 Plug 'mhinz/vim-janah'
-Plug 'nanotech/jellybeans'
 Plug 'sainnhe/sonokai'
-Plug 'dracula/vim', { 'as': 'dracula' }
 Plug 'tomasr/molokai'
 Plug 'rrethy/vim-hexokinase', { 'do': 'make hexokinase' }
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
@@ -100,7 +98,6 @@ Plug 'scrooloose/nerdcommenter'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'terryma/vim-multiple-cursors'
 Plug 'mileszs/ack.vim'
-Plug 'morhetz/gruvbox'
 Plug 'Yggdroot/indentLine'
 Plug 'luochen1990/rainbow'
 Plug 'liuchengxu/vista.vim'
@@ -111,6 +108,7 @@ Plug 'sheerun/vim-polyglot'
 Plug 'liuchengxu/vim-clap', { 'do': { -> clap#installer#force_download() } }
 Plug 'tpope/vim-fugitive'
 Plug 'junegunn/gv.vim'
+Plug 'brooth/far.vim'
 Plug 'terryma/vim-smooth-scroll'
 Plug 'vn-ki/coc-clap'
 call plug#end()
@@ -172,7 +170,7 @@ nmap <silent> gd <Plug>(coc-definition)
 nmap <silent> gy <Plug>(coc-type-definition)
 nmap <silent> gi <Plug>(coc-implementation)
 nmap <silent> gr <Plug>(coc-references)
-
+autocmd FileType python let b:coc_root_patterns = ['.git', '.env']
 " Use K to show documentation in preview window.
 nnoremap <silent> K :call <SID>show_documentation()<CR>
 
@@ -238,7 +236,7 @@ command! -nargs=0 OR   :call     CocAction('runCommand', 'editor.action.organize
 " NOTE: Please see `:h coc-status` for integrations with external plugins that
 " provide custom statusline: lightline.vim, vim-airline.
 set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
-
+set sessionoptions+=globals
 " Mappings for CoCList
 " Show all diagnostics.
 nnoremap <silent><nowait> <space>a  :<C-u>CocList diagnostics<cr>
@@ -289,10 +287,6 @@ noremap <C-f> :Clap tags <CR>
 let g:vista_fzf_preview = ['right:50%']
 
 "autocmd BufReadPost *.cpp,*.c,*.h,*.hpp,*.cc,*.cxx,*.py,*.sh,*.xml call Vista_sidebar_toggle()
-function Vista_sidebar_toggle()
-    call vista#sidebar#ToggleFocus()
-    call vista#sidebar#ToggleFocus()
-endfunction
 
 
 """clap Config
@@ -305,14 +299,15 @@ noremap <C-l> :Clap blines<CR>
 " find buffer
 noremap <C-b> :Clap buffers<CR>
 
-nnoremap <leader>F :Clap grep ++query=<cword>  .<CR>
+let g:far#source = 'rg'
+nnoremap <leader>F :F  <c-r>=expand("<cword>")<cr>  <CR>
 vmap <leader>F :Clap grep  ++query=@visual  .<CR>
 let g:clap_preview_delay=10
 let g:clap_provider_grep_delay=10
 let g:clap_open_preview='always'
 let g:clap_preview_size=10
 let g:clap_preview_direction="LR"
-let g:ackprg = 'rg --vimgrep --smart-case --glob !tags -e '
+let g:ackprg = 'rg --vimgrep --smart-case --glob "!(.*\|*tag*)" -e '
 nnoremap <silent> <Leader>A :Ack! <C-R>=expand("<cword>")<CR><CR>
 
 
@@ -327,6 +322,7 @@ nnoremap <F5> :let _s=@/<Bar>:%s/\s\+$//e<Bar>:let @/=_s<Bar><CR>
 noremap <silent> <c-u> :call smooth_scroll#up(&scroll, 0, 2)<CR>
 noremap <silent> <c-d> :call smooth_scroll#down(&scroll, 0, 2)<CR> 
 
+let g:far#enable_undo = 1
 autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | execute "normal! g'\"" | endif
 if filereadable(".vimrc")
     source .vimrc

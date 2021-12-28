@@ -1,8 +1,12 @@
 {
   "list.source.files.defaultOptions": ["--number-select"],
-  "python.linting.enabled":false,
+  "python.linting.enabled":true,
+  "pyright.disableDiagnostics": true,
+  "python.linting.pylintEnabled": true,
+  "python.linting.pylintArgs": ["--rcfile='~wayne/work/vats2/pylintrc'"],
   "clangd.enabled": true,
-  "clangd.checkUpdates": true,
+  "clangd.checkUpdates": false,
   "clangd.disableDiagnostics": true,
-  "clangd.path": "~/.config/coc/extensions/coc-clangd-data/install/13.0.0/clangd_13.0.0/bin/clangd"
+  "clangd.serverCompletionRanking": true,
+  "codeLens.enable": true
 }
