@@ -53,8 +53,7 @@ format = "$all_status$ahead_behind"
 [hostname]
 ssh_only = false
 format = "<[$hostname]($style)> "
-trim_at = "-"
-style = "bold dimmed white"
+style = "bold dimmed blue"
 disabled = false
 
 [memory_usage]
