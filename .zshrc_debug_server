@@ -275,3 +275,4 @@ while read -r key;
 do
     source $key
 done <<< $completion_keyword
+eval $(starship init zsh)

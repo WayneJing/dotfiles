@@ -277,3 +277,4 @@ fpath+=${ZDOTDIR:-~}/.zsh_functions
 fpath+=${ZDOTDIR:-~}/.zsh_functions
 autoload -U compinit && compinit
 source ~/completion_keyword
+eval $(startship init zsh)
