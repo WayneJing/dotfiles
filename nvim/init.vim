@@ -105,12 +105,14 @@ Plug 'craigemery/vim-autotag'
 Plug 'octol/vim-cpp-enhanced-highlight'
 Plug 'mtdl9/vim-log-highlighting'
 Plug 'sheerun/vim-polyglot'
-Plug 'liuchengxu/vim-clap', { 'do': { -> clap#installer#force_download() } }
+Plug 'nvim-treesitter/nvim-treesitter',{'do': ':TSUpdate'}
+Plug 'nvim-lua/plenary.nvim'
+Plug 'nvim-telescope/telescope.nvim'
 Plug 'tpope/vim-fugitive'
 Plug 'junegunn/gv.vim'
-Plug 'brooth/far.vim'
 Plug 'terryma/vim-smooth-scroll'
-Plug 'vn-ki/coc-clap'
+Plug 'fannheyward/telescope-coc.nvim'
+Plug 'nvim-telescope/telescope-fzf-native.nvim',{'do': 'make'}
 call plug#end()
 
 """PlugConfig
@@ -124,10 +126,7 @@ let g:cpp_concepts_highlight=1
 """autotag
 let g:autotagStartMethod='fork'
 let g:autotagTagsFile="tags"
-"""vim-clap
-let g:clap_theme = 'material_design_dark'
-"let g:clap_open_preview = 'on_move'
-nmap <silent><F12> :Clap<CR>
+nmap <silent><F12> :Telescope<CR>
 
 """rainbow
 let g:rainbow_active = 1
@@ -283,30 +282,11 @@ let g:vista#renderer#enable_icon = 1
 let g:vista_sidebar_width = 45
 map <silent> <F4> :Vista!!<CR>
 imap <silent> <F4> <ESC>:Vista!!<CR>
-noremap <C-f> :Clap tags <CR>
-let g:vista_fzf_preview = ['right:50%']
+noremap <C-f> :Telescope coc document_symbols <CR>
+noremap <leader><C-f> :Telescope coc workspace_symbols <CR>
 
 "autocmd BufReadPost *.cpp,*.c,*.h,*.hpp,*.cc,*.cxx,*.py,*.sh,*.xml call Vista_sidebar_toggle()
 
-
-"""clap Config
-" find file
-noremap \ :Clap files .<CR>
-" find history
-noremap <C-h> :Clap history<CR>
-" find lines containing keywords
-noremap <C-l> :Clap blines<CR>
-" find buffer
-noremap <C-b> :Clap buffers<CR>
-
-let g:far#source = 'rg'
-nnoremap <leader>F :F  <c-r>=expand("<cword>")<cr>  <CR>
-vmap <leader>F :Clap grep  ++query=@visual  .<CR>
-let g:clap_preview_delay=10
-let g:clap_provider_grep_delay=10
-let g:clap_open_preview='always'
-let g:clap_preview_size=10
-let g:clap_preview_direction="LR"
 let g:ackprg = 'rg --vimgrep --smart-case --glob "!(.*\|*tag*)" -e '
 nnoremap <silent> <Leader>A :Ack! <C-R>=expand("<cword>")<CR><CR>
 
@@ -322,8 +302,21 @@ nnoremap <F5> :let _s=@/<Bar>:%s/\s\+$//e<Bar>:let @/=_s<Bar><CR>
 noremap <silent> <c-u> :call smooth_scroll#up(&scroll, 0, 2)<CR>
 noremap <silent> <c-d> :call smooth_scroll#down(&scroll, 0, 2)<CR> 
 
-let g:far#enable_undo = 1
+"telescope
+"
+" find file
+noremap \ :Telescope fd<CR>
+" find history
+noremap <C-h> :Telescope oldfiles <CR>
+" find lines containing keywords
+noremap <C-l> :Telescope current_buffer_fuzzy_find<CR>
+" find buffer
+noremap <C-b> :Telescope buffers<CR>
+nnoremap <leader>fg <cmd>Telescope live_grep<cr>
+nnoremap <leader>fh <cmd>Telescope help_tags<cr>
+lua << EOF
+require('telescope').load_extension('coc')
+require('telescope').load_extension('fzf')
+EOF
+
 autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | execute "normal! g'\"" | endif
-if filereadable(".vimrc")
-    source .vimrc
-endif
