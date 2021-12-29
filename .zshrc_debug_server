@@ -237,6 +237,7 @@ get_latest_rc() {
     if [ "$old_commit" != "$new_commit" ]; then
         omz reload
     fi
+    cpv -r $DOTFILE_PATH/vmc /mnt/share/
     cd $original_path
 }
 
@@ -275,4 +276,4 @@ while read -r key;
 do
     source $key
 done <<< $completion_keyword
-eval $(starship init zsh)
+eval "$(starship init zsh)"
