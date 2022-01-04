@@ -87,7 +87,6 @@ Plug 'mhinz/vim-startify'
 Plug 'mhinz/vim-janah'
 Plug 'sainnhe/sonokai'
 Plug 'tomasr/molokai'
-Plug 'rrethy/vim-hexokinase', { 'do': 'make hexokinase' }
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 Plug 'vim-airline/vim-airline'
@@ -105,7 +104,7 @@ Plug 'craigemery/vim-autotag'
 Plug 'octol/vim-cpp-enhanced-highlight'
 Plug 'mtdl9/vim-log-highlighting'
 Plug 'sheerun/vim-polyglot'
-Plug 'nvim-treesitter/nvim-treesitter',{'do': ':TSUpdate'}
+Plug 'nvim-treesitter/nvim-treesitter'
 Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-telescope/telescope.nvim'
 Plug 'tpope/vim-fugitive'
@@ -290,7 +289,6 @@ noremap <leader><C-f> :Telescope coc workspace_symbols <CR>
 let g:ackprg = 'rg --vimgrep --smart-case --glob "!(.*\|*tag*)" -e '
 nnoremap <silent> <Leader>A :Ack! <C-R>=expand("<cword>")<CR><CR>
 
-
 highlight  Normal guibg=NONE ctermbg=none
 """Hexokinase config
 let g:Hexokinase_highlighters = ['backgroundfull']
@@ -314,6 +312,7 @@ noremap <C-l> :Telescope current_buffer_fuzzy_find<CR>
 noremap <C-b> :Telescope buffers<CR>
 nnoremap <leader>fg <cmd>Telescope live_grep<cr>
 nnoremap <leader>fh <cmd>Telescope help_tags<cr>
+nnoremap <leader>q <cmd> Telescope quickfix<cr>
 lua << EOF
 require('telescope').load_extension('coc')
 require('telescope').load_extension('fzf')
