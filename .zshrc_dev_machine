@@ -188,10 +188,6 @@ sconnect() {
             ip="10.67.82.42"
             change_title "sshsuper2 ip $ip ipmi 10.67.82.21 passwd 12345678"
             ;;
-        foxconn)
-            ip="10.67.245.255"
-            change_title "sshfoxconn ip $ip ipmi 10.67.81.185"
-            ;;
           *)
             ;;
         esac
@@ -200,7 +196,7 @@ sconnect() {
 }
 
 ipmihelper() {
-    machine_name_list='super1\nsuper2\nfoxconn'
+    machine_name_list='super1\nsuper2'
     #echo $machine_name_list
 
     if [ "" = "$1" ]; then
@@ -218,10 +214,6 @@ ipmihelper() {
         ipmi_ip="10.67.82.21"
         user="ADMIN"
         passwd="12345678"
-    elif [ "" != "$(echo $machine_name | grep "foxconn")" ]; then
-        ipmi_ip="10.67.81.185"
-        user="admin"
-        passwd="admin"
     else
         echo "invalid param"
         return -1

@@ -1,26 +1,10 @@
-
-complete -F _vmc_complete_func vmc
-_vmc_complete_func() {
-    local cur prev opts
-    COMPREPLY=()
-    cur="${COMP_WORDS[COMP_CWORD]}"
-    prev="${COMP_WORDS[COMP_CWORD-1]}"
-    opts="connect console launch kill list-dev change-dev"
-
-    if [[ ${cur} == * ]]; then
-        COMPREPLY=( $(compgen -W "${opts}" -- ${cur}) )
-        return 0
-    fi
-}
-
-
 complete -F _ssh_connect_complete_func sconnect
 _ssh_connect_complete_func() {
     local cur prev opts
     COMPREPLY=()
     cur="${COMP_WORDS[COMP_CWORD]}"
     prev="${COMP_WORDS[COMP_CWORD-1]}"
-    opts="super1 super2 foxconn"
+    opts="super1 super2"
 
     if [[ ${cur} == * ]]; then
         COMPREPLY=( $(compgen -W "${opts}" -- ${cur}) )
